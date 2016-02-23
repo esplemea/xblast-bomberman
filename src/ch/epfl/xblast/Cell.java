@@ -47,7 +47,7 @@ public final class Cell {
 	}
 
 	private static ArrayList<Cell> rowSpiralOrder() {
-
+ POTATO
 	}
 
 	public Cell neighbor(Direction dir) {
