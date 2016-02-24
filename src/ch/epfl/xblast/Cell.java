@@ -1,10 +1,8 @@
 package ch.epfl.xblast;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import org.omg.CORBA.PRIVATE_MEMBER;
+import java.util.List;
 
 public final class Cell {
 	public final static int COLUMNS = 15;
@@ -47,7 +45,7 @@ public final class Cell {
 	}
 
 	private static ArrayList<Cell> rowSpiralOrder() {
- POTATO
+		return null;
 	}
 
 	public Cell neighbor(Direction dir) {
