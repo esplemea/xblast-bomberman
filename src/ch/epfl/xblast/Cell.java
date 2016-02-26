@@ -49,34 +49,25 @@ public final class Cell {
 	}
 
 	public Cell neighbor(Direction dir) {
+		int y=my;
+		int x=mx;
 		switch (dir) {
 		case N:
-			if (this.my == 0) {
-				return new Cell(this.mx, ROWS - 1);
-			} else {
-				return new Cell(this.mx, this.my - 1);
-			}
+			y--;
+			break;
 		case S:
-			if (this.my == ROWS - 1) {
-				return new Cell(this.mx, 0);
-			} else {
-				return new Cell(this.mx, this.my + 1);
-			}
+			y++;
+			break;
 		case E:
-			if (this.mx == COLUMNS - 1) {
-				return new Cell(0, this.my);
-			} else {
-				return new Cell(this.mx + 1, this.my);
-			}
+			x++;
+			break;
 		case W:
-			if (this.mx == 0) {
-				return new Cell(COLUMNS - 1, this.my);
-			} else {
-				return new Cell(this.mx - 1, this.my);
-			}
+			x--;
+			break;
 		default:
 			return null;
 		}
+		return new Cell(x, y);
 	}
 
 	public boolean equals(Object that) {
