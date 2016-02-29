@@ -9,10 +9,10 @@ public final class Cell {
 	public final static int ROWS = 13;
 	public final static int COUNT = ROWS * COLUMNS;
 	public final static List<Cell> ROW_MAJOR_ORDER = Collections.unmodifiableList(rowMajorOrder());
-	public final static List<Cell> ROW_SPIRAL_ORDER = Collections.unmodifiableList(rowSpiralOrder());
+	public final static List<Cell> SPIRAL_ORDER = Collections.unmodifiableList(rowSpiralOrder());
 	private final int mx, my;
 
-	Cell(int x, int y) {
+	public Cell(int x, int y) {
 		mx = Math.floorMod(x, COLUMNS);
 		my = Math.floorMod(y, ROWS);
 	}
@@ -38,19 +38,39 @@ public final class Cell {
 		ArrayList<Cell> cellules = new ArrayList<Cell>();
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLUMNS; j++) {
-				cellules.add(new Cell(i, j));
+				cellules.add(new Cell(j, i));
 			}
 		}
 		return cellules;
 	}
 
 	private static ArrayList<Cell> rowSpiralOrder() {
-		return null;
+		int x = 0, y = 0;
+		ArrayList<Cell> cellules = new ArrayList<Cell>();
+		do {
+			for (int i = x; i < COLUMNS - x; i++) {
+				cellules.add(new Cell(i, y));
+			}
+			for (int j = y + 1; j < ROWS - y; j++) {
+				cellules.add(new Cell(COLUMNS - x - 1, j));
+			}
+			if (x < COLUMNS - x - 1 && y < ROWS - y - 1) {
+				for (int i = COLUMNS - x - 2; i > x; i--) {
+					cellules.add(new Cell(i, ROWS - y - 1));
+				}
+				for (int j = ROWS - y - 1; j > y; j--) {
+					cellules.add(new Cell(x, j));
+				}
+			}
+			x++;
+			y++;
+		} while (x < COLUMNS - x && y < ROWS - y);
+		return cellules;
 	}
 
 	public Cell neighbor(Direction dir) {
-		int y=my;
-		int x=mx;
+		int y = my;
+		int x = mx;
 		switch (dir) {
 		case N:
 			y--;

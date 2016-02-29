@@ -34,4 +34,44 @@ public final class SubCell {
 	public boolean isCentral() {
 		return (mx % SUBCELL_SIZE == 8 && my % SUBCELL_SIZE == 8);
 	}
+
+	public SubCell neighbor(Direction dir) {
+		int y = my;
+		int x = mx;
+		switch (dir) {
+		case N:
+			y--;
+			break;
+		case S:
+			y++;
+			break;
+		case E:
+			x++;
+			break;
+		case W:
+			x--;
+			break;
+		default:
+			return null;
+		}
+		return new SubCell(x, y);
+	}
+
+	public Cell containingCell() {
+		int x = this.mx / SUBCELL_SIZE;
+		int y = this.my / SUBCELL_SIZE;
+		return new Cell(x, y);
+	}
+
+	public boolean equals(Object that) {
+		if (that.getClass() == this.getClass()) {
+			SubCell obj = (SubCell) that;
+			return (obj.my == this.my && obj.mx == this.mx);
+		}
+		return false;
+	}
+
+	public String toString() {
+		return "("+mx+","+my+")";
+	}
 }
