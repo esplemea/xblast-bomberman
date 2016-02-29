@@ -1,6 +1,7 @@
 package ch.epfl.xblast;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Collections;
 
 public final class Lists {
@@ -22,10 +23,11 @@ public final class Lists {
         }
         else
         {
-            List<T> subList = l.subList(0, size-2);
+            List<T> subList = new ArrayList<T>(l.subList(0, size-1));
             Collections.reverse(subList);
-            l.addAll(subList);
-            return l;
+            List<T> output = new ArrayList<T>(l);
+            output.addAll(subList);
+            return output;
         }
     }
         
