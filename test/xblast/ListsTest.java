@@ -21,5 +21,23 @@ public class ListsTest {
         
         assertEquals(expected, a);
     }
+    
+    @Test
+    public void mirroredWorksOnTrivialList()
+    {
+        List<String> a = Arrays.asList("k");
+        a = Lists.mirrored(a);
+        
+        List<String> expected = Arrays.asList("k");
+        
+        assertEquals(expected, a);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void mirroredFailsOnEmptyList()
+    {
+        List<String> a = Arrays.asList();
+        a = Lists.mirrored(a);
+    }
 
 }

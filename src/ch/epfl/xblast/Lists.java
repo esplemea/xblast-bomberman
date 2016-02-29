@@ -17,10 +17,6 @@ public final class Lists {
         {
             throw new IllegalArgumentException();
         }
-        else if(size==1)
-        {
-            return l;
-        }
         else
         {
             List<T> subList = new ArrayList<T>(l.subList(0, size-1));
