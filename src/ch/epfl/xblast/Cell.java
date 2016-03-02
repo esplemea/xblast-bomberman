@@ -134,3 +134,4 @@ public final class Cell {
 		return "(" + this.mx + "," + this.my + ")";
 	}
 }
+
