@@ -70,6 +70,8 @@ public final class Board {
 	{
 	    checkBlockMatrix(innerBlocks,Cell.ROWS-2,Cell.COLUMNS-2);
 	    
+	    List<Sq<Block>> a = new ArrayList<Sq<Block>>();
+	    
 	    return null;
 	}
 	
