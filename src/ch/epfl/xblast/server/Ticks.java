@@ -1,4 +1,4 @@
-package ch.epfl.xblast;
+package ch.epfl.xblast.server;
 
 public interface Ticks {
  public static int PLAYER_DYING_TICKS = 8;

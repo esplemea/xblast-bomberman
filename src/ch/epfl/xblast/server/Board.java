@@ -1,10 +1,12 @@
-package ch.epfl.xblast;
+package ch.epfl.xblast.server;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.cs108.Sq;
+import ch.epfl.xblast.Cell;
+import ch.epfl.xblast.Lists;
 
 public final class Board {
 
