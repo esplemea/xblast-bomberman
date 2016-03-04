@@ -1,5 +1,12 @@
 package ch.epfl.xblast;
 
+/**
+ * 
+ * @author Nicolas ZIMMERMANN Clara DI MARCO
+ * @date March 4, 2016
+ *
+ */
+
 public final class SubCell {
 	public final static int SUBCELL_SIZE = 16;
 	public final static int X_MAX = Cell.COLUMNS * SUBCELL_SIZE;// largeur du

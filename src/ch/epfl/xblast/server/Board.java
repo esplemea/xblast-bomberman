@@ -8,6 +8,13 @@ import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Lists;
 
+/**
+ * 
+ * @author Nicolas ZIMMERMANN Clara DI MARCO
+ * @date March 4, 2016
+ *
+ */
+
 public final class Board {
 
 	private final List<Sq<Block>> blocks;
