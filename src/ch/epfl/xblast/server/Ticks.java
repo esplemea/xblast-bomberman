@@ -1,5 +1,12 @@
 package ch.epfl.xblast.server;
 
+/**
+ * 
+ * @author Nicolas ZIMMERMANN Clara DI MARCO
+ * @date March 4, 2016
+ *
+ */
+
 public interface Ticks {
  public static int PLAYER_DYING_TICKS = 8;
  public static int PLAYER_INVULNERABLE_TICKS = 64;
