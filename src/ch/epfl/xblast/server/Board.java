@@ -120,7 +120,16 @@ public final class Board {
 	 */
 
 	private static void checkBlockMatrix(List<List<Block>> matrix, int rows, int columns) {
-		if (matrix.size() != rows || matrix.get(0).size() != columns) {
+	    boolean state = false;
+	    
+	    for(List<Block> list : matrix){
+	        if(list.size()!= columns)
+	        {
+	            state = true;
+	        }
+	    }
+	    
+		if (matrix.size() != rows || state) {
 			throw new IllegalArgumentException();
 		}
 	}
