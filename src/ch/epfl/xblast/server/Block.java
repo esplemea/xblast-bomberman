@@ -1,4 +1,4 @@
-package ch.epfl.xblast;
+package ch.epfl.xblast.server;
 
 public enum Block {
 	FREE, INDESTRUCTIBLE_WALL, DESTRUCTIBLE_WALL, CRUMBLING_WALL;

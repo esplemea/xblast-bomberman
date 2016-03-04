@@ -49,3 +49,5 @@ Temporary Items
 .classpath
 
 .classpath
+
+test/ch/epfl/xblast/server/BoardDrawer.java
