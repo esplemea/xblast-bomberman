@@ -2,8 +2,6 @@ package ch.epfl.xblast.server;
 
 import java.util.Arrays;
 
-import ch.epfl.xblast.Block;
-import ch.epfl.xblast.Board;
 import ch.epfl.xblast.Cell;
 import javafx.application.Application;
 import javafx.scene.Group;
