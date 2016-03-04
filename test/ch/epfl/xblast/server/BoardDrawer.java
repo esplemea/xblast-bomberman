@@ -14,7 +14,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
- * @author Alexandre MICHEL
+ * @author Clara DI MARCO and Nicolas ZIMMERMAN
  * @date 28 févr. 2016
  *
  * @version 1.0
