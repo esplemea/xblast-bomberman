@@ -75,13 +75,13 @@ public final class Board {
 		
 		board.add(Collections.nCopies(Cell.COLUMNS, Block.INDESTRUCTIBLE_WALL));
 		
-		List<Block> centralline;
+		List<Block> centralLine;
 		for (List<Block> list : innerBlocks) {
-			centralline = new ArrayList<>();
-			centralline.add(Block.INDESTRUCTIBLE_WALL);
-			centralline.addAll(list);
-			centralline.add(Block.INDESTRUCTIBLE_WALL);
-			board.add(centralline);
+			centralLine = new ArrayList<>();
+			centralLine.add(Block.INDESTRUCTIBLE_WALL);
+			centralLine.addAll(list);
+			centralLine.add(Block.INDESTRUCTIBLE_WALL);
+			board.add(centralLine);
 		}
 		board.add(Collections.nCopies(Cell.COLUMNS, Block.INDESTRUCTIBLE_WALL));
 		
@@ -107,8 +107,6 @@ public final class Board {
 			line.addAll(Lists.mirrored(list));
 			board.add(line);
 		}
-		System.out.println(board.size());
-		System.out.println(board.get(0).size());
 		return ofInnerBlocksWalled(Lists.mirrored(board));
 	}
 
