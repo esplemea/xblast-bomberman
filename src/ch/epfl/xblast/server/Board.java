@@ -100,8 +100,6 @@ public final class Board {
 			line.addAll(Lists.mirrored(list));
 			board.add(line);
 		}
-		System.out.println(board.size());
-		System.out.println(board.get(0).size());
 		return ofInnerBlocksWalled(Lists.mirrored(board));
 	}
 
