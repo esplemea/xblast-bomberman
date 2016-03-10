@@ -1,6 +1,7 @@
 package ch.epfl.xblast.server;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.cs108.Sq;
@@ -26,7 +27,7 @@ public class Bomb {
 	 */
 	public Bomb(PlayerID ownerId, Cell position, Sq<Integer> fuseLengths, int range) {
 		if (ownerId == null || position == null || fuseLengths == null) {
-			throw new NullPointerException("ownerId, position, fuseLengths must be not null");
+			throw new NullPointerException("ownerId, position and fuseLengths must be not null");
 		}
 		this.ownerId = ownerId;
 		this.position = position;
@@ -45,13 +46,14 @@ public class Bomb {
 	 * @param range
 	 */
 	public Bomb(PlayerID ownerId, Cell position, int fuseLengths, int range) {
-		if (ownerId == null || position == null || fuseLengths == 0) {
-			throw new NullPointerException("ownerId, position, fuseLengths must be not null");
-		}
-		this.ownerId = ownerId;
-		this.position = position;
-		this.fuseLengths = Sq.iterate(fuseLengths, u -> u - 1).limit(fuseLengths);
-		this.range = range;
+//		if (ownerId == null || position == null || fuseLengths == 0) {
+//			throw new NullPointerException("ownerId, position, fuseLengths must be not null");
+//		}
+//		this.ownerId = ownerId;
+//		this.position = position;
+//		this.fuseLengths = Sq.iterate(fuseLengths, u -> u - 1).limit(fuseLengths);
+//		this.range = range;
+	    this(ownerId, position, Sq.iterate(fuseLengths, u -> u - 1).limit(fuseLengths), range);
 	}
 	
 	/**
@@ -94,10 +96,12 @@ public class Bomb {
 	}
 	
 	public List<Sq<Sq<Cell>>> explosion(){
-		//TODO Compliqué ;)
+	    List<Sq<Sq<Cell>>> explosion = 
+	            Arrays.asList(explosionArmTowards(Direction.E),explosionArmTowards(Direction.W),explosionArmTowards(Direction.N),explosionArmTowards(Direction.S));
+	    return explosion;
 	}
 	
 	private Sq<Sq<Cell>> explosionArmTowards(Direction dir){
-		//TODO Sq.iterate(position, c -> c.neighbor(dir));
+	    return Sq.repeat(3, Sq.iterate(position, c -> c.neighbor(dir)).limit(range));
 	}
 }
