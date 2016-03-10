@@ -1,5 +1,12 @@
 package ch.epfl.xblast;
 
+/**
+ * 
+ * @author Nicolas ZIMMERMANN Clara DI MARCO
+ * @date March 4, 2016
+ *
+ */
+
 public enum Direction {
 	N,E,S,W;
 	
