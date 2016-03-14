@@ -1,9 +1,5 @@
 package ch.epfl.xblast.server;
 
-<<<<<<< HEAD
-public class Player {
-	
-=======
 /**
  * 
  * @author Nicolas ZIMMERMANN Clara DI MARCO
@@ -13,5 +9,6 @@ public class Player {
 
 public class Player {
 
->>>>>>> master
+
+
 }
