@@ -1,3 +1,4 @@
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
@@ -46,7 +47,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /bin/
-.classpath
+
 
 .classpath
-
