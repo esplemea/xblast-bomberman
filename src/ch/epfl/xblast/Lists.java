@@ -28,4 +28,27 @@ public final class Lists {
 		output.addAll(subList);
 		return output;
 	}
+	
+	public static <T> List<List<T>> permutations(List<T> l){
+	    if(l.isEmpty()) {
+            return new ArrayList<List<T>>();
+        }
+	    else
+	    {
+	        List<T> subList = new ArrayList<T>(l.subList(1, l.size()));
+	        List<List<T>> temp = permutations(subList);
+	        List<List<T>> output = new ArrayList<List<T>>();
+	        for(List<T> a : temp)
+	        {
+	            for(int i=0; i < a.size(); ++i)
+	            {
+	                List<T> list = a;
+	                list.add(i, l.get(0));
+	                output.add(list);
+	            }
+	        }
+	    
+	        return output;
+	    }
+	}
 }
