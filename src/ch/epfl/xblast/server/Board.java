@@ -8,6 +8,13 @@ import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Lists;
 
+/**
+ * 
+ * @author Nicolas ZIMMERMANN Clara DI MARCO
+ * @date March 4, 2016
+ *
+ */
+
 public final class Board {
 
 	private final List<Sq<Block>> blocks;
@@ -100,8 +107,6 @@ public final class Board {
 			line.addAll(Lists.mirrored(list));
 			board.add(line);
 		}
-		System.out.println(board.size());
-		System.out.println(board.get(0).size());
 		return ofInnerBlocksWalled(Lists.mirrored(board));
 	}
 
@@ -120,7 +125,16 @@ public final class Board {
 	 */
 
 	private static void checkBlockMatrix(List<List<Block>> matrix, int rows, int columns) {
-		if (matrix.size() != rows || matrix.get(0).size() != columns) {
+	    boolean state = false;
+	    
+	    for(List<Block> list : matrix){
+	        if(list.size()!= columns)
+	        {
+	            state = true;
+	        }
+	    }
+	    
+		if (matrix.size() != rows || state) {
 			throw new IllegalArgumentException();
 		}
 	}
