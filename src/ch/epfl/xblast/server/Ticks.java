@@ -1,4 +1,6 @@
 package ch.epfl.xblast.server;
+<<<<<<< HEAD:src/ch/epfl/xblast/server/Ticks.java
+=======
 
 /**
  * 
@@ -6,6 +8,7 @@ package ch.epfl.xblast.server;
  * @date March 4, 2016
  *
  */
+>>>>>>> master:src/ch/epfl/xblast/server/Ticks.java
 
 public interface Ticks {
  public static int PLAYER_DYING_TICKS = 8;
