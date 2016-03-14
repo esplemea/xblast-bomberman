@@ -7,8 +7,6 @@ import java.util.List;
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Lists;
-<<<<<<< HEAD:src/ch/epfl/xblast/server/Board.java
-=======
 
 /**
  * 
@@ -16,7 +14,6 @@ import ch.epfl.xblast.Lists;
  * @date March 4, 2016
  *
  */
->>>>>>> master:src/ch/epfl/xblast/server/Board.java
 
 public final class Board {
 

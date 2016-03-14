@@ -1,8 +1,8 @@
 package ch.epfl.xblast.server;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.Cell;
@@ -10,10 +10,10 @@ import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerID;
 
 public class Bomb {
-	PlayerID ownerId;
-	Cell position;
-	Sq<Integer> fuseLengths;
-	int range;
+	private final PlayerID ownerId;
+	private final Cell position;
+	private final Sq<Integer> fuseLengths;
+	private final int range;
 
 	/**
 	 * Constructor for a bomb
@@ -26,12 +26,9 @@ public class Bomb {
 	 * @param range
 	 */
 	public Bomb(PlayerID ownerId, Cell position, Sq<Integer> fuseLengths, int range) {
-		if (ownerId == null || position == null || fuseLengths == null) {
-			throw new NullPointerException("ownerId, position and fuseLengths must be not null");
-		}
-		this.ownerId = ownerId;
-		this.position = position;
-		this.fuseLengths = fuseLengths;
+		this.ownerId = Objects.requireNonNull(ownerId);
+		this.position = Objects.requireNonNull(position);
+		this.fuseLengths = Objects.requireNonNull(fuseLengths);
 		this.range = range;
 	}
 
@@ -46,62 +43,60 @@ public class Bomb {
 	 * @param range
 	 */
 	public Bomb(PlayerID ownerId, Cell position, int fuseLengths, int range) {
-//		if (ownerId == null || position == null || fuseLengths == 0) {
-//			throw new NullPointerException("ownerId, position, fuseLengths must be not null");
-//		}
-//		this.ownerId = ownerId;
-//		this.position = position;
-//		this.fuseLengths = Sq.iterate(fuseLengths, u -> u - 1).limit(fuseLengths);
-//		this.range = range;
-	    this(ownerId, position, Sq.iterate(fuseLengths, u -> u - 1).limit(fuseLengths), range);
+		this(ownerId, position, Sq.iterate(fuseLengths, u -> u - 1).limit(fuseLengths), range);
 	}
-	
+
 	/**
 	 * 
 	 * @return the actual bomb owner ID
 	 */
-	public PlayerID ownerId(){
+	public PlayerID ownerId() {
 		return ownerId;
 	}
-	
+
 	/**
 	 * 
 	 * @return the bomb's position
 	 */
-	public Cell position(){
+	public Cell position() {
 		return position;
 	}
-	
+
 	/**
 	 * 
-	 * @return the bomb sequence of fuseLengths 
+	 * @return the bomb sequence of fuseLengths
 	 */
-	public Sq<Integer> fuseLengths(){
+	public Sq<Integer> fuseLengths() {
 		return fuseLengths;
 	}
-	
+
 	/**
 	 * 
 	 * @return the actual bomb's fuseLengths
 	 */
-	public int fuseLength(){
+	public int fuseLength() {
 		return fuseLengths.head();
 	}
+
 	/**
 	 * 
 	 * @return the bomb's range
 	 */
-	public int range(){
+	public int range() {
 		return range;
 	}
-	
-	public List<Sq<Sq<Cell>>> explosion(){
-	    List<Sq<Sq<Cell>>> explosion = 
-	            Arrays.asList(explosionArmTowards(Direction.E),explosionArmTowards(Direction.W),explosionArmTowards(Direction.N),explosionArmTowards(Direction.S));
-	    return explosion;
+
+	/**
+	 * 
+	 * @return the bomb's explosion
+	 */
+	public List<Sq<Sq<Cell>>> explosion() {
+		List<Sq<Sq<Cell>>> explosion = Arrays.asList(explosionArmTowards(Direction.E), explosionArmTowards(Direction.W),
+				explosionArmTowards(Direction.N), explosionArmTowards(Direction.S));
+		return explosion;
 	}
-	
-	private Sq<Sq<Cell>> explosionArmTowards(Direction dir){
-	    return Sq.repeat(3, Sq.iterate(position, c -> c.neighbor(dir)).limit(range));
+
+	private Sq<Sq<Cell>> explosionArmTowards(Direction dir) {
+		return Sq.repeat(3, Sq.iterate(position, c -> c.neighbor(dir)).limit(range));
 	}
 }

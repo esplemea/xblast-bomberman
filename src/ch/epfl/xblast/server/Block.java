@@ -1,6 +1,4 @@
 package ch.epfl.xblast.server;
-<<<<<<< HEAD:src/ch/epfl/xblast/server/Block.java
-=======
 
 /**
  * 
@@ -8,7 +6,7 @@ package ch.epfl.xblast.server;
  * @date March 4, 2016
  *
  */
->>>>>>> master:src/ch/epfl/xblast/server/Block.java
+
 
 public enum Block {
 	FREE, INDESTRUCTIBLE_WALL, DESTRUCTIBLE_WALL, CRUMBLING_WALL;
