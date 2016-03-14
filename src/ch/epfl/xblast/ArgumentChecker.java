@@ -8,7 +8,7 @@ public class ArgumentChecker {
 	 * @param value
 	 * @return value
 	 */
-	int requireNonNegative(int value){
+	public static int requireNonNegative(int value){
 		if(value<0){
 			throw new IllegalArgumentException("The value must be positive or 0");
 		}
