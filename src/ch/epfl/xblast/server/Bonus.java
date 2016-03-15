@@ -1,5 +1,12 @@
 package ch.epfl.xblast.server;
 
+/**
+ * 
+ * @author Nicolas ZIMMERMANN and Clara DI MARCO
+ * @date March 15, 2016
+ *
+ */
+
 public enum Bonus {
     
     INC_BOMB {
