@@ -1,5 +1,7 @@
 package ch.epfl.xblast;
 
+import java.util.Objects;
+
 /**
  * 
  * @author Nicolas ZIMMERMANN Clara DI MARCO
@@ -122,5 +124,13 @@ public final class SubCell {
 	 */
 	public String toString() {
 		return "("+mx+","+my+")";
+	}
+	
+	/**
+	 * hash using the the position of the containing Cell and the position of the Subcell in it
+	 */
+	@Override
+	public int hashCode(){
+		return Objects.hash(containingCell().rowMajorIndex()*256+my*X_MAX+mx);
 	}
 }

@@ -3,6 +3,7 @@ package ch.epfl.xblast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 
@@ -138,6 +139,14 @@ public final class Cell {
 	 */
 	public String toString() {
 		return "(" + this.mx + "," + this.my + ")";
+	}
+	
+	/**
+	 * hash using the rowMajorIndex
+	 */
+	@Override
+	public int hashCode(){
+		return Objects.hash(rowMajorIndex());
 	}
 }
 

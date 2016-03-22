@@ -50,7 +50,7 @@ public final class Board {
 		checkBlockMatrix(rows, Cell.ROWS, Cell.COLUMNS);
 
 		List<Sq<Block>> board = new ArrayList<Sq<Block>>();
-		
+
 		for (List<Block> list : rows)
 			for (Block block : list)
 				board.add(Sq.constant(block));
@@ -72,9 +72,9 @@ public final class Board {
 		checkBlockMatrix(innerBlocks, Cell.ROWS - 2, Cell.COLUMNS - 2);
 
 		List<List<Block>> board = new ArrayList<>();
-		
+
 		board.add(Collections.nCopies(Cell.COLUMNS, Block.INDESTRUCTIBLE_WALL));
-		
+
 		List<Block> centralline;
 		for (List<Block> list : innerBlocks) {
 			centralline = new ArrayList<>();
@@ -84,7 +84,7 @@ public final class Board {
 			board.add(centralline);
 		}
 		board.add(Collections.nCopies(Cell.COLUMNS, Block.INDESTRUCTIBLE_WALL));
-		
+
 		return ofRows(board);
 	}
 
@@ -125,15 +125,14 @@ public final class Board {
 	 */
 
 	private static void checkBlockMatrix(List<List<Block>> matrix, int rows, int columns) {
-	    boolean state = false;
-	    
-	    for(List<Block> list : matrix){
-	        if(list.size()!= columns)
-	        {
-	            state = true;
-	        }
-	    }
-	    
+		boolean state = false;
+
+		for (List<Block> list : matrix) {
+			if (list.size() != columns) {
+				state = true;
+			}
+		}
+
 		if (matrix.size() != rows || state) {
 			throw new IllegalArgumentException();
 		}
@@ -144,7 +143,6 @@ public final class Board {
 	 *            The cell from which to return the sequence of Block
 	 * @return The sequence of Block in the cell c.
 	 */
-
 	public Sq<Block> blocksAt(Cell c) {
 		return blocks.get(c.rowMajorIndex());
 	}
@@ -154,7 +152,6 @@ public final class Board {
 	 *            The cell from which to return the Block
 	 * @return The head Block from the cell c.
 	 */
-
 	public Block blockAt(Cell c) {
 		return blocks.get(c.rowMajorIndex()).head();
 	}
