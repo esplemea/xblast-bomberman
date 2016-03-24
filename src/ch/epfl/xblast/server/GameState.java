@@ -170,10 +170,28 @@ public final class GameState {
 
 	public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents, Set<PlayerID> bombDropEvents) {
 		Set<Cell> blastedCells = blastedCells();
+
+		List<Bomb> bombsOutput = new ArrayList<>();
+		for (Bomb bomb : bombs) {
+			//decreased the fuseLength by 1 when it won't become 0
+			if (bomb.fuseLength() - 1 != 0) {
+				bombsOutput.add(new Bomb(bomb.ownerId(), bomb.position(), bomb.fuseLength() - 1, bomb.range()));
+			} 
+			//if the bomb is hit by a blast
+			else if(blastedCells.contains(bomb.position()));{
+				explosions.addAll(bomb.explosion());
+			} 
+			else {// ???
+				explosions.addAll(bomb.explosion());
+			}
+		}
+		bombsOutput.addAll(newlyDroppedBombs(players, bombDropEvents, bombsOutput));
+
 		Board boardOutput = nextBoard(board, consumedBonuses, blastedCells);
 		List<Player> playersOutput = nextPlayers(players, playerBonuses, bombedCells1, boardOutput, blastedCells,
 				speedChangeEvents);
-		return new GameState(ticks + 1, boardOutput, playersOutput, bombs, explosions, blasts);
+		List<Sq<Sq<Cell>>> explosionsOutput = nextExplosions(explosions);
+		return new GameState(ticks + 1, boardOutput, playersOutput, bombsOutput, explosionsOutput, blasts);
 	}
 
 	private static Board nextBoard(Board board0, Set<Cell> consumedBonuses, Set<Cell> blastedCells1) {
@@ -187,11 +205,27 @@ public final class GameState {
 	}
 
 	private static List<Sq<Sq<Cell>>> nextExplosions(List<Sq<Sq<Cell>>> explosions0) {
-		return null;
+		for (Sq<Sq<Cell>> explosion : explosions0) {
+			explosion = explosion.tail();
+		}
+		return explosions0;
 	}
 
+	/**
+	 * 
+	 * @param players0
+	 * @param bombDropEvents
+	 * @param bombs0
+	 * @return the list of newly dropped bombs
+	 */
 	private static List<Bomb> newlyDroppedBombs(List<Player> players0, Set<PlayerID> bombDropEvents,
 			List<Bomb> bombs0) {
-		return null;
+		List<Bomb> bombsDropped = new ArrayList<>();
+		for (Player player : players0) {
+			if(bombDropEvents.contains(player.id())){
+				bombsDropped.add(new Bomb(player.id(), player.position().containingCell(), Ticks.BOMB_FUSE_TICKS, player.bombRange()));
+			}
+		}
+		return bombsDropped;
 	}
 }
