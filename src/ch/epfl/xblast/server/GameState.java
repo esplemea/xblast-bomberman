@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
+import javax.swing.plaf.basic.BasicInternalFrameUI.InternalFrameLayout;
+
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.ArgumentChecker;
 import ch.epfl.xblast.Cell;
@@ -168,42 +170,73 @@ public final class GameState {
 		return output;
 	}
 
+	/**
+	 * The GameState goes 1 step forward
+	 * 
+	 * @param speedChangeEvents
+	 * @param bombDropEvents
+	 * @return the new GameState
+	 */
 	public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents, Set<PlayerID> bombDropEvents) {
 		Set<Cell> blastedCells = blastedCells();
 
 		List<Bomb> bombsOutput = new ArrayList<>();
 		for (Bomb bomb : bombs) {
-			//decreased the fuseLength by 1 when it won't become 0
+			// decreased the fuseLength by 1 when it won't become 0
 			if (bomb.fuseLength() - 1 != 0) {
 				bombsOutput.add(new Bomb(bomb.ownerId(), bomb.position(), bomb.fuseLength() - 1, bomb.range()));
-			} 
-			//if the bomb is hit by a blast
-			else if(blastedCells.contains(bomb.position()));{
+			}
+			// if the bomb is hit by a blast
+			else if (blastedCells.contains(bomb.position())) {
 				explosions.addAll(bomb.explosion());
-			} 
-			else {// ???
+			} else {// when the fuseLength become 0, the bomb explodes
 				explosions.addAll(bomb.explosion());
 			}
 		}
 		bombsOutput.addAll(newlyDroppedBombs(players, bombDropEvents, bombsOutput));
 
 		Board boardOutput = nextBoard(board, consumedBonuses, blastedCells);
-		List<Player> playersOutput = nextPlayers(players, playerBonuses, bombedCells1, boardOutput, blastedCells,
+		List<Player> playersOutput = nextPlayers(players, playerBonuses, bombsOutput, boardOutput, blastedCells,
 				speedChangeEvents);
 		List<Sq<Sq<Cell>>> explosionsOutput = nextExplosions(explosions);
 		return new GameState(ticks + 1, boardOutput, playersOutput, bombsOutput, explosionsOutput, blasts);
 	}
 
+	/**
+	 * TODO
+	 * 
+	 * @param board0
+	 * @param consumedBonuses
+	 * @param blastedCells1
+	 * @return
+	 */
 	private static Board nextBoard(Board board0, Set<Cell> consumedBonuses, Set<Cell> blastedCells1) {
 		return null;
 	}
 
+	/**
+	 * TODO in step 6
+	 * 
+	 * @param players0
+	 * @param playerBonuses
+	 * @param bombedCells1
+	 * @param board1
+	 * @param blastedCells1
+	 * @param speedChangeEvents
+	 * @return
+	 */
 	private static List<Player> nextPlayers(List<Player> players0, Map<PlayerID, Bonus> playerBonuses,
 			Set<Cell> bombedCells1, Board board1, Set<Cell> blastedCells1,
 			Map<PlayerID, Optional<Direction>> speedChangeEvents) {
 		return null;
 	}
 
+	/**
+	 * the explosions go 1 step forward
+	 * TODO On devrait rajouter les nouveaux blasts ici ?
+	 * @param explosions0
+	 * @return the new List of explosions
+	 */
 	private static List<Sq<Sq<Cell>>> nextExplosions(List<Sq<Sq<Cell>>> explosions0) {
 		for (Sq<Sq<Cell>> explosion : explosions0) {
 			explosion = explosion.tail();
@@ -221,11 +254,25 @@ public final class GameState {
 	private static List<Bomb> newlyDroppedBombs(List<Player> players0, Set<PlayerID> bombDropEvents,
 			List<Bomb> bombs0) {
 		List<Bomb> bombsDropped = new ArrayList<>();
+		int totalBombs;
+		boolean state;
 		for (Player player : players0) {
-			if(bombDropEvents.contains(player.id())){
-				bombsDropped.add(new Bomb(player.id(), player.position().containingCell(), Ticks.BOMB_FUSE_TICKS, player.bombRange()));
+			totalBombs = 0;
+			state = true;
+			for (Bomb bomb : bombs0) {
+				if (bomb.ownerId() == player.id())
+					++totalBombs;
+				if (bomb.position() == player.position().containingCell())
+					state = false;
+			}
+			if (bombDropEvents.contains(player.id()) && player.isAlive() && totalBombs < player.maxBombs() && state) {
+				bombsDropped.add(new Bomb(player.id(), player.position().containingCell(), Ticks.BOMB_FUSE_TICKS,
+						player.bombRange()));
+				bombs0.add(new Bomb(player.id(), player.position().containingCell(), Ticks.BOMB_FUSE_TICKS,
+						player.bombRange()));
 			}
 		}
+
 		return bombsDropped;
 	}
 }
