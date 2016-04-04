@@ -1,6 +1,7 @@
 package ch.epfl.xblast.server;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.ArgumentChecker;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
+import ch.epfl.xblast.Lists;
 import ch.epfl.xblast.PlayerID;
 
 /**
@@ -35,6 +37,8 @@ public final class GameState {
     private final List<Sq<Sq<Cell>>> explosions;
     private final List<Sq<Cell>> blasts;
     private static final Random RANDOM = new Random(2016);
+    private static List<List<PlayerID>> permutationsList = Lists
+            .permutations(Arrays.asList(PlayerID.values()));
 
     /**
      * Constructor for a GameState
@@ -201,7 +205,7 @@ public final class GameState {
             }
         }
         bombsOutput.addAll(
-                newlyDroppedBombs(players, bombDropEvents, bombsOutput));
+                newlyDroppedBombs(/*permutationsList.get(ticks%permutationsList.size())*/players, bombDropEvents, bombsOutput));
 
         Set<Cell> consumedBonuses = new HashSet<>();
         Map<PlayerID, Bonus> playerBonuses = new HashMap<>();
@@ -338,10 +342,10 @@ public final class GameState {
                     && totalBombs < player.maxBombs() && state) {
                 bombsDropped.add(new Bomb(player.id(),
                         player.position().containingCell(),
-                        Ticks.BOMB_FUSE_TICKS, player.bombRange()));
+                        Ticks.BOMB_FUSE_TICKS - 1, player.bombRange()));
                 bombs0.add(new Bomb(player.id(),
                         player.position().containingCell(),
-                        Ticks.BOMB_FUSE_TICKS, player.bombRange()));
+                        Ticks.BOMB_FUSE_TICKS - 1, player.bombRange()));
             }
         }
 
