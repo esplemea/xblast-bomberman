@@ -28,6 +28,7 @@ import ch.epfl.xblast.PlayerID;
 
 public final class GameState {
 
+
 	private final int ticks;
 	private final Board board;
 	private final List<Player> players;
