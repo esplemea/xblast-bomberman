@@ -196,15 +196,34 @@ public final class GameState {
 		}
 		bombsOutput.addAll(newlyDroppedBombs(players, bombDropEvents, bombsOutput));
 
+		Set<Cell> consumedBonuses = new HashSet<>();
+		Map<PlayerID,Bonus> playerBonuses = new HashMap<>();
+		for(Player p : alivePlayers()){
+		    Cell playerActualCell = p.position().containingCell();
+		    if(board.blockAt(playerActualCell) == Block.BONUS_BOMB){
+		        consumedBonuses.add(playerActualCell);
+		        playerBonuses.put(p.id(), Bonus.INC_BOMB);
+		    }
+		    else if(board.blockAt(playerActualCell) == Block.BONUS_RANGE){
+		        consumedBonuses.add(playerActualCell);
+                playerBonuses.put(p.id(), Bonus.INC_RANGE);
+		    }
+		}
+		
+		
+		Set<Cell> bombedCells = new HashSet<>();
+		for(Bomb bomb : bombsOutput){
+		    bombedCells.add(bomb.position());
+		}
+		
 		Board boardOutput = nextBoard(board, consumedBonuses, blastedCells);
-		List<Player> playersOutput = nextPlayers(players, playerBonuses, bombsOutput, boardOutput, blastedCells,
+		List<Player> playersOutput = nextPlayers(players, playerBonuses, bombedCells , boardOutput, blastedCells,
 				speedChangeEvents);
 		List<Sq<Sq<Cell>>> explosionsOutput = nextExplosions(explosions);
 		return new GameState(ticks + 1, boardOutput, playersOutput, bombsOutput, explosionsOutput, blasts);
 	}
 
 	/**
-	 * TODO
 	 * 
 	 * @param board0
 	 * @param consumedBonuses
@@ -212,7 +231,41 @@ public final class GameState {
 	 * @return
 	 */
 	private static Board nextBoard(Board board0, Set<Cell> consumedBonuses, Set<Cell> blastedCells1) {
-		return null;
+	    List<Sq<Block>> blocks = new ArrayList<>();
+	    for(Cell c : Cell.ROW_MAJOR_ORDER){
+	        Block b = board0.blockAt(c);
+	        switch(b){ 
+	            case DESTRUCTIBLE_WALL:
+	                if(blastedCells1.contains(c))
+	                {
+	                    int random = RANDOM.nextInt(3);
+	                    Block randomBlock = Block.FREE;
+	                    if(random == 0){
+	                        randomBlock = Block.BONUS_BOMB;
+	                    }
+	                    else if(random == 1){
+	                        randomBlock = Block.BONUS_RANGE;
+	                    }
+	                    blocks.add(Sq.repeat(Ticks.WALL_CRUMBLING_TICKS, Block.CRUMBLING_WALL).concat(Sq.constant(randomBlock)));
+	                }
+	                break;   
+	            case BONUS_BOMB:
+	            case BONUS_RANGE:
+	                if(consumedBonuses.contains(c)){
+	                    blocks.add(Sq.constant(Block.FREE));
+	                }
+	                else if(blastedCells1.contains(c)){
+	                    blocks.add(Sq.repeat(Ticks.BONUS_DISAPPEARING_TICKS, b).concat(Sq.constant(Block.FREE)));
+	                }
+	                else{
+	                    blocks.add(board0.blocksAt(c).tail());
+	                }
+	                break;
+	            default:
+	                blocks.add(board0.blocksAt(c).tail());
+	        }
+	    }
+		return new Board(blocks);
 	}
 
 	/**
@@ -233,8 +286,8 @@ public final class GameState {
 	}
 
 	/**
-	 * the explosions go 1 step forward
-	 * TODO On devrait rajouter les nouveaux blasts ici ?
+	 * The explosions go one step forward
+     *
 	 * @param explosions0
 	 * @return the new List of explosions
 	 */
