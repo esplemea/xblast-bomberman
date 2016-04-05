@@ -90,7 +90,7 @@ public class Player {
 	 */
 	public Sq<LifeState> statesForNextLife() {
 		Sq<LifeState> lives = Sq.repeat(Ticks.PLAYER_DYING_TICKS, new LifeState(lives(), State.DYING));
-		if (lives() == 0) {
+		if (!isAlive()) {
 			lives.concat(Sq.constant(new LifeState(0, State.DEAD)));
 		} else {
 			lives.concat(Sq.repeat(Ticks.PLAYER_INVULNERABLE_TICKS, new LifeState(lives() - 1, State.INVULNERABLE)))

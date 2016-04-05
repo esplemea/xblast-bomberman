@@ -18,6 +18,8 @@ import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.Lists;
 import ch.epfl.xblast.PlayerID;
+import ch.epfl.xblast.server.Player.LifeState;
+import ch.epfl.xblast.server.Player.LifeState.State;
 
 /**
  * 
@@ -180,7 +182,6 @@ public final class GameState {
 	 */
 	public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents, Set<PlayerID> bombDropEvents) {
 		Set<Cell> blastedCells = blastedCells();
-
 		List<Bomb> bombsOutput = new ArrayList<>();
 		for (Bomb bomb : bombs) {
 			// decreased the fuseLength by 1 when it won't become 0
@@ -194,8 +195,17 @@ public final class GameState {
 				explosions.addAll(bomb.explosion());
 			}
 		}
-		bombsOutput.addAll(newlyDroppedBombs(
-				/* permutationsList.get(ticks%permutationsList.size()) */players, bombDropEvents, bombsOutput));
+
+		List<PlayerID> orderPlayerID = permutationsList.get(ticks % permutationsList.size());
+		List<Player> orderPlayer = new ArrayList<>();
+		for (PlayerID name : orderPlayerID) {
+			for (Player player : players) {
+				if (player.id() == name) {
+					orderPlayer.add(player);
+				}
+			}
+		}
+		bombsOutput.addAll(newlyDroppedBombs(orderPlayer, bombDropEvents, bombsOutput));
 
 		Set<Cell> consumedBonuses = new HashSet<>();
 		Map<PlayerID, Bonus> playerBonuses = new HashMap<>();
@@ -284,7 +294,27 @@ public final class GameState {
 	private static List<Player> nextPlayers(List<Player> players0, Map<PlayerID, Bonus> playerBonuses,
 			Set<Cell> bombedCells1, Board board1, Set<Cell> blastedCells1,
 			Map<PlayerID, Optional<Direction>> speedChangeEvents) {
-		return null;
+		List<Player> playerOutput = new ArrayList<>();
+		Sq<LifeState> LifeStatesOutput;
+		for (Player player : players0) {
+			if(player.lifeState().state()==State.VULNERABLE&&blastedCells1.contains(player.position().containingCell())){
+			LifeStatesOutput=player.statesForNextLife();
+			}
+			else{
+				LifeStatesOutput=player.lifeStates().tail();
+			}
+			switch(playerBonuses.get(player.id())){
+			case INC_RANGE:
+				playerOutput.add(new Player(...));
+				break;
+			case INC_BOMB:
+				playerOutput.add(new Player(...));
+				break;
+			default:
+				playerOutput.add(new Player(...));	
+			}
+		}
+		return playerOutput;
 	}
 
 	/**
@@ -310,20 +340,9 @@ public final class GameState {
 	private static List<Bomb> newlyDroppedBombs(List<Player> players0, Set<PlayerID> bombDropEvents,
 			List<Bomb> bombs0) {
 		List<Bomb> bombsDropped = new ArrayList<>();
-		// TODO ticks n'est pas accessible ici (non-static et on n'a pas accès à GameState)... Une idée ?
-		List<PlayerID> orderPlayerID = permutationsList.get(ticks % permutationsList.size());
-		List<Player> orderPlayer = new ArrayList<>();
-		for (PlayerID name : orderPlayerID) {
-			for (Player player : players0) {
-				if (player.id() == name) {
-					orderPlayer.add(player);
-				}
-			}
-		}
 		int totalBombs;
 		boolean state;
-
-		for (Player player : orderPlayer) {
+		for (Player player : players0) {
 			totalBombs = 0;
 			state = true;
 			for (Bomb bomb : bombs0) {
