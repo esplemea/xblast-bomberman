@@ -270,9 +270,11 @@ public final class GameState {
                     for (int i = 0; i < Ticks.BONUS_DISAPPEARING_TICKS; ++i) {
                         futureBlock = futureBlock.tail();
                     }
-                    if (futureBlock.head() == Block.FREE) {
+                    if (futureBlock.head() != Block.FREE) {
                         blocks.add(Sq.repeat(Ticks.BONUS_DISAPPEARING_TICKS, b)
                                 .concat(Sq.constant(Block.FREE)));
+                    } else {
+                        blocks.add(board0.blocksAt(c).tail());
                     }
                 } else {
                     blocks.add(board0.blocksAt(c).tail());
