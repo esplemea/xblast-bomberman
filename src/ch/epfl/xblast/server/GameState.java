@@ -297,84 +297,146 @@ public final class GameState {
         }
         return new Board(blocks);
     }
-	
-	/**
-	 * TODO in step 6
-	 * 
-	 * @param players0
-	 * @param playerBonuses
-	 * @param bombedCells1
-	 * @param board1
-	 * @param blastedCells1
-	 * @param speedChangeEvents
-	 * @return
-	 */
-	private static List<Player> nextPlayers(List<Player> players0, Map<PlayerID, Bonus> playerBonuses,
-			Set<Cell> bombedCells1, Board board1, Set<Cell> blastedCells1,
-			Map<PlayerID, Optional<Direction>> speedChangeEvents) {
-		List<Player> playerOutput = new ArrayList<>();
-		Sq<LifeState> lifeStatesOutput;
-		Sq<DirectedPosition> directedPosOutput;
-		for (Player player : players0) {
-			if (speedChangeEvents.containsKey(player.id())) {
-				Direction dir = speedChangeEvents.get(player.id()).get();
-				if (dir.isParallelTo(player.direction())) {
-					directedPosOutput = DirectedPosition.moving(new DirectedPosition(player.position(), dir));
-				} else if (speedChangeEvents.get(player.id()).get() == null) {
-					directedPosOutput = player.directedPositions().takeWhile(p -> !p.position().isCentral())
-							.concat(DirectedPosition
-									.stopped(player.directedPositions().findFirst(p -> p.position().isCentral())));
-				} else {
-					directedPosOutput = player.directedPositions().takeWhile(p -> !p.position().isCentral())
-							.concat(DirectedPosition.moving(new DirectedPosition(
-									player.directedPositions().findFirst(p -> p.position().isCentral()).position(),
-									dir)));
-				}
-			} else
-				directedPosOutput = player.directedPositions();
-			// if the player isn't blocked (by bombs or walls), he moves 
-			//TODO quand un mur le bloque
-			if (!(directedPosOutput.head().position().distanceToCentral() == 6)
-					|| !(directedPosOutput.tail().head().position().distanceToCentral() == 5)
-					|| !bombedCells1.contains(directedPosOutput.head().position().containingCell()))
-				directedPosOutput = directedPosOutput.tail();
-			if (player.lifeState().state() == State.VULNERABLE
-					&& blastedCells1.contains(player.position().containingCell()))
-				lifeStatesOutput = player.statesForNextLife();
-			else
-				lifeStatesOutput = player.lifeStates().tail();
 
-			switch (playerBonuses.get(player.id())) {
-			case INC_RANGE:
-				playerOutput.add(new Player(player.id(), lifeStatesOutput, directedPosOutput, player.maxBombs(),
-						player.bombRange() + 1));
-				break;
-			case INC_BOMB:
-				playerOutput.add(new Player(player.id(), lifeStatesOutput, directedPosOutput, player.maxBombs() + 1,
-						player.bombRange()));
-				;
-				break;
-			default:
-				playerOutput.add(new Player(player.id(), lifeStatesOutput, directedPosOutput, player.maxBombs(),
-						player.bombRange()));
-				;
-			}
-		}
-		return playerOutput;
-	}
+    /**
+     * TODO in step 6
+     * 
+     * @param players0
+     * @param playerBonuses
+     * @param bombedCells1
+     * @param board1
+     * @param blastedCells1
+     * @param speedChangeEvents
+     * @return
+     */
+    private static List<Player> nextPlayers(List<Player> players0,
+            Map<PlayerID, Bonus> playerBonuses, Set<Cell> bombedCells1,
+            Board board1, Set<Cell> blastedCells1,
+            Map<PlayerID, Optional<Direction>> speedChangeEvents) {
 
-	/**
-	 * The explosions go one step forward
-	 *
-	 * @param explosions0
-	 * @return the new List of explosions
-	 */
-	private static List<Sq<Sq<Cell>>> nextExplosions(List<Sq<Sq<Cell>>> explosions0) {
-		for (Sq<Sq<Cell>> explosion : explosions0) {
-			explosion = explosion.tail();
-		}
-		return explosions0;
-	}
+        List<Player> playerOutput = new ArrayList<>();
+        Sq<LifeState> lifeStatesOutput;
+        Sq<DirectedPosition> directedPosOutput;
+
+        for (Player player : players0) {
+
+            /*
+             * First step: Computation of the new sequence of directed position
+             */
+
+            // if the player want to change direction
+            if (speedChangeEvents.containsKey(player.id())) {
+                Direction askedDir = speedChangeEvents.get(player.id()).get();
+                // if the player wants to go backward, he can whenever he wants
+                if (askedDir.isParallelTo(player.direction())) {
+                    directedPosOutput = DirectedPosition.moving(
+                            new DirectedPosition(player.position(), askedDir));
+                }
+                // if he wants to stop, he can on the next central SubCell
+                else if (speedChangeEvents.get(player.id()).get() == null) {
+                    directedPosOutput = player.directedPositions()
+                            .takeWhile(p -> !p.position().isCentral())
+                            .concat(DirectedPosition.stopped(
+                                    player.directedPositions().findFirst(
+                                            p -> p.position().isCentral())));
+                }
+                // otherwise, his new direction is taken on the next central
+                // SubCell
+                else {
+                    directedPosOutput = player.directedPositions()
+                            .takeWhile(p -> !p.position().isCentral())
+                            .concat(DirectedPosition
+                                    .moving(new DirectedPosition(player
+                                            .directedPositions()
+                                            .findFirst(p -> p.position()
+                                                    .isCentral())
+                                            .position(), askedDir)));
+                }
+            }
+            // if he does not want to change direction, the directed position
+            // stays the same
+            else
+                directedPosOutput = player.directedPositions();
+
+            /*
+             * Second step: Verification of the possible obstacles
+             */
+
+            // if the player isn't blocked by a bomb, he moves
+            if (!(directedPosOutput.head().position().distanceToCentral() == 6)
+                    || !(directedPosOutput.tail().head().position()
+                            .distanceToCentral() == 5)
+                    || !bombedCells1.contains(directedPosOutput.head()
+                            .position().containingCell())) {
+                directedPosOutput = directedPosOutput.tail();
+            } else {
+            }
+            // if the player isn't blocked by a wall, he moves
+            if (directedPosOutput.head().position().isCentral()) {
+                if (!(board1.blockAt(directedPosOutput.head().position()
+                        .containingCell().neighbor(
+                                player.direction())) == Block.INDESTRUCTIBLE_WALL)
+                        && !(board1.blockAt(directedPosOutput.head().position()
+                                .containingCell().neighbor(player
+                                        .direction())) == Block.DESTRUCTIBLE_WALL)) {
+                    directedPosOutput = directedPosOutput.tail();
+                }
+            } else {
+            }
+
+            /*
+             * Third step: The player's LifeState move on
+             */
+
+            // if the player is vulnerable and on a blasted cell, he loses a
+            // life or die
+            if (player.lifeState().state() == State.VULNERABLE && blastedCells1
+                    .contains(player.position().containingCell())) {
+                lifeStatesOutput = player.statesForNextLife();
+            } else {
+                lifeStatesOutput = player.lifeStates().tail();
+            }
+
+            /*
+             * Fourth step: The player gets new capacities if he ate a bonus
+             * (Include the creation of the fresh Players)
+             */
+
+            switch (playerBonuses.get(player.id())) {
+            case INC_RANGE:
+                playerOutput.add(new Player(player.id(), lifeStatesOutput,
+                        directedPosOutput, player.maxBombs(),
+                        player.bombRange() + 1));
+                break;
+            case INC_BOMB:
+                playerOutput.add(new Player(player.id(), lifeStatesOutput,
+                        directedPosOutput, player.maxBombs() + 1,
+                        player.bombRange()));
+                ;
+                break;
+            default:
+                playerOutput.add(new Player(player.id(), lifeStatesOutput,
+                        directedPosOutput, player.maxBombs(),
+                        player.bombRange()));
+                ;
+            }
+        }
+        return playerOutput;
+    }
+
+    /**
+     * The explosions go one step forward
+     *
+     * @param explosions0
+     * @return the new List of explosions
+     */
+    private static List<Sq<Sq<Cell>>> nextExplosions(
+            List<Sq<Sq<Cell>>> explosions0) {
+        for (Sq<Sq<Cell>> explosion : explosions0) {
+            explosion = explosion.tail();
+        }
+        return explosions0;
+    }
 
     /**
      * 
