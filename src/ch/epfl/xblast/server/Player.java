@@ -23,6 +23,8 @@ public class Player {
 	private final Sq<DirectedPosition> directedPos;
 	private final int bombRange;
 	private final int maxBombs;
+	private final static int MAX_BOMBS = 9;
+	private final static int MAX_BOMBS_RANGE = 9;
 
 	/**
 	 * Constructor for a Player
@@ -38,8 +40,8 @@ public class Player {
 		this.id = Objects.requireNonNull(id);
 		this.lifeState = Objects.requireNonNull(lifeStates);
 		this.directedPos = Objects.requireNonNull(directedPos);
-		this.maxBombs = ArgumentChecker.requireNonNegative(maxBombs);
-		this.bombRange = ArgumentChecker.requireNonNegative(bombRange);
+		this.maxBombs = ArgumentChecker.requireNonNegative(maxBombs<=MAX_BOMBS?maxBombs:MAX_BOMBS);
+		this.bombRange = ArgumentChecker.requireNonNegative(bombRange<=MAX_BOMBS_RANGE?bombRange:MAX_BOMBS_RANGE);
 	}
 
 	/**

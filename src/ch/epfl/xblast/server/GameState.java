@@ -18,6 +18,7 @@ import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.Lists;
 import ch.epfl.xblast.PlayerID;
+import ch.epfl.xblast.server.Player.DirectedPosition;
 import ch.epfl.xblast.server.Player.LifeState;
 import ch.epfl.xblast.server.Player.LifeState.State;
 
@@ -232,60 +233,55 @@ public final class GameState {
 		return new GameState(ticks + 1, boardOutput, playersOutput, bombsOutput, explosionsOutput, blasts);
 	}
 
-    /**
-     * 
-     * @param board0
-     * @param consumedBonuses
-     * @param blastedCells1
-     * @return
-     */
-    private static Board nextBoard(Board board0, Set<Cell> consumedBonuses,
-            Set<Cell> blastedCells1) {
-        List<Sq<Block>> blocks = new ArrayList<>();
-        for (Cell c : Cell.ROW_MAJOR_ORDER) {
-            Block b = board0.blockAt(c);
-            switch (b) {
-            case DESTRUCTIBLE_WALL:
-                if (blastedCells1.contains(c)) {
-                    int random = RANDOM.nextInt(3);
-                    Block randomBlock = Block.FREE;
-                    if (random == 0) {
-                        randomBlock = Block.BONUS_BOMB;
-                    } else if (random == 1) {
-                        randomBlock = Block.BONUS_RANGE;
-                    }
-                    blocks.add(Sq
-                            .repeat(Ticks.WALL_CRUMBLING_TICKS,
-                                    Block.CRUMBLING_WALL)
-                            .concat(Sq.constant(randomBlock)));
-                }
-                break;
-            case BONUS_BOMB:
-            case BONUS_RANGE:
-                if (consumedBonuses.contains(c)) {
-                    blocks.add(Sq.constant(Block.FREE));
-                } else if (blastedCells1.contains(c)) {
-                    Sq<Block> futureBlock = board0.blocksAt(c);
-                    for (int i = 0; i < Ticks.BONUS_DISAPPEARING_TICKS; ++i) {
-                        futureBlock = futureBlock.tail();
-                    }
-                    if (futureBlock.head() != Block.FREE) {
-                        blocks.add(Sq.repeat(Ticks.BONUS_DISAPPEARING_TICKS, b)
-                                .concat(Sq.constant(Block.FREE)));
-                    } else {
-                        blocks.add(board0.blocksAt(c).tail());
-                    }
-                } else {
-                    blocks.add(board0.blocksAt(c).tail());
-                }
-                break;
-            default:
-                blocks.add(board0.blocksAt(c).tail());
-            }
-        }
-        return new Board(blocks);
-    }
-
+	/**
+	 * 
+	 * @param board0
+	 * @param consumedBonuses
+	 * @param blastedCells1
+	 * @return
+	 */
+	private static Board nextBoard(Board board0, Set<Cell> consumedBonuses, Set<Cell> blastedCells1) {
+		List<Sq<Block>> blocks = new ArrayList<>();
+		for (Cell c : Cell.ROW_MAJOR_ORDER) {
+			Block b = board0.blockAt(c);
+			switch (b) {
+			case DESTRUCTIBLE_WALL:
+				if (blastedCells1.contains(c)) {
+					int random = RANDOM.nextInt(3);
+					Block randomBlock = Block.FREE;
+					if (random == 0) {
+						randomBlock = Block.BONUS_BOMB;
+					} else if (random == 1) {
+						randomBlock = Block.BONUS_RANGE;
+					}
+					blocks.add(Sq.repeat(Ticks.WALL_CRUMBLING_TICKS, Block.CRUMBLING_WALL)
+							.concat(Sq.constant(randomBlock)));
+				}
+				break;
+			case BONUS_BOMB:
+			case BONUS_RANGE:
+				if (consumedBonuses.contains(c)) {
+					blocks.add(Sq.constant(Block.FREE));
+				} else if (blastedCells1.contains(c)) {
+					Sq<Block> futureBlock = board0.blocksAt(c);
+					for (int i = 0; i < Ticks.BONUS_DISAPPEARING_TICKS; ++i) {
+						futureBlock = futureBlock.tail();
+					}
+					if (futureBlock.head() != Block.FREE) {
+						blocks.add(Sq.repeat(Ticks.BONUS_DISAPPEARING_TICKS, b).concat(Sq.constant(Block.FREE)));
+					} else {
+						blocks.add(board0.blocksAt(c).tail());
+					}
+				} else {
+					blocks.add(board0.blocksAt(c).tail());
+				}
+				break;
+			default:
+				blocks.add(board0.blocksAt(c).tail());
+			}
+		}
+		return new Board(blocks);
+	}
 
 	/**
 	 * TODO in step 6
@@ -302,23 +298,51 @@ public final class GameState {
 			Set<Cell> bombedCells1, Board board1, Set<Cell> blastedCells1,
 			Map<PlayerID, Optional<Direction>> speedChangeEvents) {
 		List<Player> playerOutput = new ArrayList<>();
-		Sq<LifeState> LifeStatesOutput;
+		Sq<LifeState> lifeStatesOutput;
+		Sq<DirectedPosition> directedPosOutput;
 		for (Player player : players0) {
-			if(player.lifeState().state()==State.VULNERABLE&&blastedCells1.contains(player.position().containingCell())){
-			LifeStatesOutput=player.statesForNextLife();
-			}
-			else{
-				LifeStatesOutput=player.lifeStates().tail();
-			}
-			switch(playerBonuses.get(player.id())){
+			if (speedChangeEvents.containsKey(player.id())) {
+				Direction dir = speedChangeEvents.get(player.id()).get();
+				if (dir.isParallelTo(player.direction())) {
+					directedPosOutput = DirectedPosition.moving(new DirectedPosition(player.position(), dir));
+				} else if (speedChangeEvents.get(player.id()).get() == null) {
+					directedPosOutput = player.directedPositions().takeWhile(p -> !p.position().isCentral())
+							.concat(DirectedPosition
+									.stopped(player.directedPositions().findFirst(p -> p.position().isCentral())));
+				} else {
+					directedPosOutput = player.directedPositions().takeWhile(p -> !p.position().isCentral())
+							.concat(DirectedPosition.moving(new DirectedPosition(
+									player.directedPositions().findFirst(p -> p.position().isCentral()).position(),
+									dir)));
+				}
+			} else
+				directedPosOutput = player.directedPositions();
+			// if the player isn't blocked (by bombs or walls), he moves 
+			//TODO quand un mur le bloque
+			if (!(directedPosOutput.head().position().distanceToCentral() == 6)
+					|| !(directedPosOutput.tail().head().position().distanceToCentral() == 5)
+					|| !bombedCells1.contains(directedPosOutput.head().position().containingCell()))
+				directedPosOutput = directedPosOutput.tail();
+			if (player.lifeState().state() == State.VULNERABLE
+					&& blastedCells1.contains(player.position().containingCell()))
+				lifeStatesOutput = player.statesForNextLife();
+			else
+				lifeStatesOutput = player.lifeStates().tail();
+
+			switch (playerBonuses.get(player.id())) {
 			case INC_RANGE:
-				playerOutput.add(new Player(...));
+				playerOutput.add(new Player(player.id(), lifeStatesOutput, directedPosOutput, player.maxBombs(),
+						player.bombRange() + 1));
 				break;
 			case INC_BOMB:
-				playerOutput.add(new Player(...));
+				playerOutput.add(new Player(player.id(), lifeStatesOutput, directedPosOutput, player.maxBombs() + 1,
+						player.bombRange()));
+				;
 				break;
 			default:
-				playerOutput.add(new Player(...));	
+				playerOutput.add(new Player(player.id(), lifeStatesOutput, directedPosOutput, player.maxBombs(),
+						player.bombRange()));
+				;
 			}
 		}
 		return playerOutput;
