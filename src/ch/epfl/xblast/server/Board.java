@@ -29,7 +29,7 @@ public final class Board {
 	 */
 	public Board(List<Sq<Block>> blocks) {
 		if (blocks.size() != Cell.COLUMNS * Cell.ROWS) {
-			throw new IllegalArgumentException("The list must contain exactly 195 sequences");
+			throw new IllegalArgumentException("The list must contain exactly 195 sequences, actual : "+blocks.size());
 		}
 		ArrayList<Sq<Block>> liste = new ArrayList<>(blocks);
 		this.blocks = Collections.unmodifiableList(liste);
