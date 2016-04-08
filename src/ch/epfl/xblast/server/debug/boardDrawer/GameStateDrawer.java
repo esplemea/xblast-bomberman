@@ -198,9 +198,9 @@ public final class GameStateDrawer extends Application {
             gc.setFill(Color.RED);
             gc.setFont(new Font(20));
             gc.fillText(player.id() + "-" + player.direction(), xAxis, vector2d.y() + 3, 58);
-            if(player.id()==PlayerID.PLAYER_1){
-                System.out.println(player.position());
-            }
+//            if(player.id()==PlayerID.PLAYER_1){
+//                System.out.println(player.position());
+//            }
         }
 
         // Draw blasts

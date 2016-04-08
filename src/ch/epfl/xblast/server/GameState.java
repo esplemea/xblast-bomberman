@@ -40,6 +40,7 @@ public final class GameState {
 	private final List<Sq<Cell>> blasts;
 	private static final Random RANDOM = new Random(2016);
 	private static List<List<PlayerID>> permutationsList = Lists.permutations(Arrays.asList(PlayerID.values()));
+	private static final int BOMB_RADIUS = 5;
 
 	/**
 	 * Constructor for a GameState
@@ -328,17 +329,24 @@ public final class GameState {
 			 */
 
 			// if the player isn't blocked by a bomb, nor by a wall, he moves
-			SubCell position = directedPosOutput.head().position();
-			if ((!(position.distanceToCentral() == 6)
-					&& !(directedPosOutput.tail().head().position().distanceToCentral() == 5)
-					&& !bombedCells1.contains(position.containingCell()))
-					&& ((position.isCentral()
-							&& !(board1.blockAt(position.containingCell()
+			SubCell position = directedPosOutput.head().position();			
+			if (!((position.distanceToCentral() == BOMB_RADIUS+1)
+					&& (directedPosOutput.tail().head().position().distanceToCentral() == BOMB_RADIUS)
+					&& bombedCells1.contains(position.containingCell()))){
+				if(position.isCentral()){
+					if(!(board1.blockAt(position.containingCell()
 									.neighbor(player.direction())) == Block.INDESTRUCTIBLE_WALL)
 							&& !(board1.blockAt(position.containingCell()
-									.neighbor(player.direction())) == Block.DESTRUCTIBLE_WALL)))) {
-				directedPosOutput = directedPosOutput.tail();
+									.neighbor(player.direction())) == Block.DESTRUCTIBLE_WALL)){
+						directedPosOutput = directedPosOutput.tail();
+					}
+				}
+				else{
+					directedPosOutput = directedPosOutput.tail();
+				}
 			}
+			
+			
 
 			/*
 			 * Third step: The player's LifeState move on
