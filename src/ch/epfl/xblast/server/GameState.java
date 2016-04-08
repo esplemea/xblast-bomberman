@@ -256,6 +256,8 @@ public final class GameState {
         List<Sq<Block>> blocks = new ArrayList<>();
         for (Cell c : Cell.ROW_MAJOR_ORDER) {
             Block b = board0.blockAt(c);
+            
+            
             switch (b) {
             case DESTRUCTIBLE_WALL:
                 if (blastedCells1.contains(c)) {
