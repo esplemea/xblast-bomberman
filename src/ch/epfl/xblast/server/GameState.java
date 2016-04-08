@@ -312,7 +312,7 @@ public final class GameState {
                 blocks.add(Sq.constant(Block.FREE));
             } else if (blastedCells1.contains(c) && b.isBonus()) {
                 blocks.add(
-                        board0.blocksAt(c).limit(Ticks.BONUS_DISAPPEARING_TICKS)
+                        board0.blocksAt(c).tail().limit(Ticks.BONUS_DISAPPEARING_TICKS)
                                 .concat(Sq.constant(Block.FREE)));
             } else {
                 blocks.add(board0.blocksAt(c).tail());
