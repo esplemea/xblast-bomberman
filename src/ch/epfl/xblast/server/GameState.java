@@ -246,26 +246,23 @@ public final class GameState {
 		List<Sq<Block>> blocks = new ArrayList<>();
 		for (Cell c : Cell.ROW_MAJOR_ORDER) {
 			Block b = board0.blockAt(c);
-			
-			if(b == Block.DESTRUCTIBLE_WALL && blastedCells1.contains(c)){
-			    int random = RANDOM.nextInt(3);
-                Block randomBlock = Block.FREE;
-                if (random == 0) {
-                    randomBlock = Block.BONUS_BOMB;
-                } else if (random == 1) {
-                    randomBlock = Block.BONUS_RANGE;
-                }
-                blocks.add(Sq.repeat(Ticks.WALL_CRUMBLING_TICKS, Block.CRUMBLING_WALL)
-                        .concat(Sq.constant(randomBlock)));
-			}
-			else if(consumedBonuses.contains(c)){
-			    blocks.add(Sq.constant(Block.FREE));
-			}
-			else if(blastedCells1.contains(c) && b.isBonus()){
-			    blocks.add(board0.blocksAt(c).limit(Ticks.BONUS_DISAPPEARING_TICKS).concat(Sq.constant(Block.FREE)));
-			}
-			else{
-			    blocks.add(board0.blocksAt(c).tail());
+
+			if (b == Block.DESTRUCTIBLE_WALL && blastedCells1.contains(c)) {
+				int random = RANDOM.nextInt(3);
+				Block randomBlock = Block.FREE;
+				if (random == 0) {
+					randomBlock = Block.BONUS_BOMB;
+				} else if (random == 1) {
+					randomBlock = Block.BONUS_RANGE;
+				}
+				blocks.add(
+						Sq.repeat(Ticks.WALL_CRUMBLING_TICKS, Block.CRUMBLING_WALL).concat(Sq.constant(randomBlock)));
+			} else if (consumedBonuses.contains(c)) {
+				blocks.add(Sq.constant(Block.FREE));
+			} else if (blastedCells1.contains(c) && b.isBonus()) {
+				blocks.add(board0.blocksAt(c).limit(Ticks.BONUS_DISAPPEARING_TICKS).concat(Sq.constant(Block.FREE)));
+			} else {
+				blocks.add(board0.blocksAt(c).tail());
 			}
 		}
 
@@ -299,20 +296,24 @@ public final class GameState {
 
 			// if the player want to change direction
 			if (speedChangeEvents.containsKey(player.id())) {
-				Direction askedDir = speedChangeEvents.get(player.id()).get();
-				// if the player wants to go backward, he can whenever he wants
-				if (askedDir.isParallelTo(player.direction())) {
-					directedPosOutput = DirectedPosition.moving(new DirectedPosition(player.position(), askedDir));
-				}
+				Direction askedDir = speedChangeEvents.get(player.id()).orElse(player.direction());
 				// if he wants to stop, he can on the next central SubCell
-				else if (!speedChangeEvents.get(player.id()).isPresent()) {
+				if (!speedChangeEvents.get(player.id()).isPresent()) {
+					System.out.println("stooooop");
 					directedPosOutput = player.directedPositions().takeWhile(p -> !p.position().isCentral())
 							.concat(DirectedPosition
 									.stopped(player.directedPositions().findFirst(p -> p.position().isCentral())));
 				}
+				// if the player wants to go backward, he can whenever he wants
+				else if (askedDir.isParallelTo(player.direction())) {
+					System.out.println("if");
+					directedPosOutput = DirectedPosition.moving(new DirectedPosition(player.position(), askedDir));
+				}
+
 				// otherwise, his new direction is taken on the next central
 				// SubCell
 				else {
+
 					directedPosOutput = player.directedPositions().takeWhile(p -> !p.position().isCentral())
 							.concat(DirectedPosition.moving(new DirectedPosition(
 									player.directedPositions().findFirst(p -> p.position().isCentral()).position(),
@@ -329,24 +330,21 @@ public final class GameState {
 			 */
 
 			// if the player isn't blocked by a bomb, nor by a wall, he moves
-			SubCell position = directedPosOutput.head().position();			
-			if (!((position.distanceToCentral() == BOMB_RADIUS+1)
+			SubCell position = directedPosOutput.head().position();
+			if (!((position.distanceToCentral() == BOMB_RADIUS + 1)
 					&& (directedPosOutput.tail().head().position().distanceToCentral() == BOMB_RADIUS)
-					&& bombedCells1.contains(position.containingCell()))){
-				if(position.isCentral()){
-					if(!(board1.blockAt(position.containingCell()
-									.neighbor(player.direction())) == Block.INDESTRUCTIBLE_WALL)
+					&& bombedCells1.contains(position.containingCell()))) {
+				if (position.isCentral()) {
+					if (!(board1.blockAt(
+							position.containingCell().neighbor(player.direction())) == Block.INDESTRUCTIBLE_WALL)
 							&& !(board1.blockAt(position.containingCell()
-									.neighbor(player.direction())) == Block.DESTRUCTIBLE_WALL)){
+									.neighbor(player.direction())) == Block.DESTRUCTIBLE_WALL)) {
 						directedPosOutput = directedPosOutput.tail();
 					}
-				}
-				else{
+				} else {
 					directedPosOutput = directedPosOutput.tail();
 				}
 			}
-			
-			
 
 			/*
 			 * Third step: The player's LifeState move on
