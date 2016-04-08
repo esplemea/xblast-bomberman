@@ -304,7 +304,7 @@ public final class GameState {
 					directedPosOutput = DirectedPosition.moving(new DirectedPosition(player.position(), askedDir));
 				}
 				// if he wants to stop, he can on the next central SubCell
-				else if (speedChangeEvents.get(player.id()).get() == null) {
+				else if (!speedChangeEvents.get(player.id()).isPresent()) {
 					directedPosOutput = player.directedPositions().takeWhile(p -> !p.position().isCentral())
 							.concat(DirectedPosition
 									.stopped(player.directedPositions().findFirst(p -> p.position().isCentral())));
