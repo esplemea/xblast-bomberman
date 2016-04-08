@@ -357,22 +357,12 @@ public final class GameState {
 			 * Fourth step: The player gets new capacities if he ate a bonus
 			 * (Include the creation of the fresh Players)
 			 */
-
-			switch (playerBonuses.get(player.id())) {
-			case INC_RANGE:
-				playerOutput.add(new Player(player.id(), lifeStatesOutput, directedPosOutput, player.maxBombs(),
-						player.bombRange() + 1));
-				break;
-			case INC_BOMB:
-				playerOutput.add(new Player(player.id(), lifeStatesOutput, directedPosOutput, player.maxBombs() + 1,
-						player.bombRange()));
-				;
-				break;
-			default:
-				playerOutput.add(new Player(player.id(), lifeStatesOutput, directedPosOutput, player.maxBombs(),
-						player.bombRange()));
-				;
+			Player p = new Player(player.id(), lifeStatesOutput, directedPosOutput, player.maxBombs(),
+					player.bombRange());
+			if (playerBonuses.containsKey(player.id())) {
+				p = playerBonuses.get(player.id()).applyTo(p);
 			}
+			playerOutput.add(p);
 		}
 		return playerOutput;
 	}
