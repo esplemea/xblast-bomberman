@@ -91,12 +91,11 @@ public class Bomb {
 	 * @return the bomb's explosion
 	 */
 	public List<Sq<Sq<Cell>>> explosion() {
-		List<Sq<Sq<Cell>>> explosion = Arrays.asList(explosionArmTowards(Direction.E), explosionArmTowards(Direction.W),
-				explosionArmTowards(Direction.N), explosionArmTowards(Direction.S));
-		return explosion;
+		return Arrays.asList(explosionArmTowards(Direction.E), explosionArmTowards(Direction.W),
+                explosionArmTowards(Direction.N), explosionArmTowards(Direction.S));
 	}
 
 	private Sq<Sq<Cell>> explosionArmTowards(Direction dir) {
-		return Sq.repeat(3, Sq.iterate(position, c -> c.neighbor(dir)).limit(range));
+		return Sq.repeat(Ticks.EXPLOSION_TICKS, Sq.iterate(position, c -> c.neighbor(dir)).limit(range));
 	}
 }
