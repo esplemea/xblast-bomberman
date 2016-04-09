@@ -53,11 +53,24 @@ public class Player {
 	 * @param bombRange
 	 */
 	public Player(PlayerID id, int lives, Cell position, int maxBombs, int bombRange) {
-		this(id, Sq.repeat(Ticks.PLAYER_INVULNERABLE_TICKS, new LifeState(lives, State.INVULNERABLE))
-				.concat(Sq.constant(new LifeState(lives, State.VULNERABLE))),
+		this(id, createLifeState(ArgumentChecker.requireNonNegative(lives)),
 				DirectedPosition.stopped(
 						new DirectedPosition(SubCell.centralSubCellOf(Objects.requireNonNull(position)), Direction.S)),
 				maxBombs, bombRange);
+	}
+
+	/**
+	 * Create a Sq<LifeState> according to the number of lifes left of the player
+	 * @param lives
+	 * @return
+	 */
+	private static Sq<LifeState> createLifeState(int lives) {
+		if (lives > 0) {
+			return Sq.repeat(Ticks.PLAYER_INVULNERABLE_TICKS, new LifeState(lives, State.INVULNERABLE))
+					.concat(Sq.constant(new LifeState(lives, State.VULNERABLE)));
+		} else{
+			return Sq.constant(new LifeState(0, State.DEAD));
+		}
 	}
 
 	/**
@@ -89,12 +102,14 @@ public class Player {
 	 * @return the sequence of LifeStates after being hit (after a death)
 	 */
 	public Sq<LifeState> statesForNextLife() {
-	    Sq<LifeState> lives ;//= Sq.repeat(Ticks.PLAYER_DYING_TICKS, new LifeState(lives(), State.DYING));
+		Sq<LifeState> lives;// = Sq.repeat(Ticks.PLAYER_DYING_TICKS, new
+							// LifeState(lives(), State.DYING));
 		if (lives() <= 1) {
 			lives = Sq.repeat(Ticks.PLAYER_DYING_TICKS, new LifeState(lives(), State.DYING))
-			        .concat(Sq.constant(new LifeState(0, State.DEAD)));
+					.concat(Sq.constant(new LifeState(0, State.DEAD)));
 		} else {
-			lives = Sq.repeat(Ticks.PLAYER_DYING_TICKS, new LifeState(lives(), State.DYING)).concat(Sq.repeat(Ticks.PLAYER_INVULNERABLE_TICKS, new LifeState(lives() - 1, State.INVULNERABLE)))
+			lives = Sq.repeat(Ticks.PLAYER_DYING_TICKS, new LifeState(lives(), State.DYING))
+					.concat(Sq.repeat(Ticks.PLAYER_INVULNERABLE_TICKS, new LifeState(lives() - 1, State.INVULNERABLE)))
 					.concat(Sq.constant(new LifeState(lives() - 1, State.VULNERABLE)));
 
 		}
@@ -106,7 +121,7 @@ public class Player {
 	 * @return the Player's number of lives
 	 */
 	public int lives() {
-	    return lifeState().lives;
+		return lifeState().lives;
 	}
 
 	/**

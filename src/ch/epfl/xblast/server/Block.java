@@ -29,7 +29,7 @@ public enum Block {
     }
 
     public boolean canHostPlayer() {
-        return this.isFree();
+        return isFree() || isBonus();
     }
 
     public boolean castsShadow() {

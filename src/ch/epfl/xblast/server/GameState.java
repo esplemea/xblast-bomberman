@@ -67,11 +67,11 @@ public final class GameState {
         }
 
         this.bombs = Objects
-                .requireNonNull(Collections.unmodifiableList(bombs));
+                .requireNonNull(Collections.unmodifiableList(new ArrayList<>(bombs)));
         this.explosions = Objects
                 .requireNonNull(Collections.unmodifiableList(explosions));
         this.blasts = Objects
-                .requireNonNull(Collections.unmodifiableList(blasts));
+                .requireNonNull(Collections.unmodifiableList(new ArrayList<>(blasts)));
     }
 
     /**
@@ -235,7 +235,6 @@ public final class GameState {
                     && p.position().isCentral()) {
                 consumedBonuses.add(playerActualCell);
                 playerBonuses.put(p.id(), Bonus.INC_BOMB);
-                System.out.println(p.maxBombs());
             } else if (board.blockAt(playerActualCell) == Block.BONUS_RANGE
                     && p.position().isCentral()) {
                 consumedBonuses.add(playerActualCell);
@@ -395,14 +394,8 @@ public final class GameState {
                             .distanceToCentral() == BOMB_RADIUS)
                     && bombedCells1.contains(position.containingCell()))) {
                 if (position.isCentral()) {
-                    if (!(board1.blockAt(position.containingCell()
-                            .neighbor(askedDir)) == Block.INDESTRUCTIBLE_WALL)
-                            && !(board1
-                                    .blockAt(position.containingCell().neighbor(
-                                            askedDir)) == Block.DESTRUCTIBLE_WALL)
-                            && !(board1
-                                    .blockAt(position.containingCell().neighbor(
-                                            askedDir)) == Block.CRUMBLING_WALL)) {
+                    if (!board1.blockAt(position.containingCell()
+                            .neighbor(askedDir)).castsShadow()) {
                         directedPosOutput = directedPosOutput.tail();
                     }
                 } else {
@@ -474,7 +467,7 @@ public final class GameState {
             for (Bomb bomb : bombs0) {
                 if (bomb.ownerId() == player.id())
                     ++totalBombs;
-                if (bomb.position() == player.position().containingCell())
+                if (bomb.position().equals(player.position().containingCell()))
                     state = false;
 
             }

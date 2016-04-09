@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.epfl.cs108.Sq;
+import ch.epfl.xblast.ArgumentChecker;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerID;
@@ -29,7 +30,7 @@ public class Bomb {
 		this.ownerId = Objects.requireNonNull(ownerId);
 		this.position = Objects.requireNonNull(position);
 		this.fuseLengths = Objects.requireNonNull(fuseLengths);
-		this.range = range;
+		this.range = ArgumentChecker.requireNonNegative(range);
 	}
 
 	/**
