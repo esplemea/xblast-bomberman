@@ -83,9 +83,9 @@ public final class Cell {
 
         ArrayList<Integer> ix = new ArrayList<>();
         ArrayList<Integer> iy = new ArrayList<>();
-        for (int i = 0; i < ROWS; ++i)
-            ix.add(i);
         for (int i = 0; i < COLUMNS; ++i)
+            ix.add(i);
+        for (int i = 0; i < ROWS; ++i)
             iy.add(i);
         boolean horizontal = true;
 
@@ -103,9 +103,11 @@ public final class Cell {
             horizontal = !horizontal;
 
         } while (!ix.isEmpty() && !iy.isEmpty());
+        
 
         return output;
     }
+    
 
     /**
      * 
