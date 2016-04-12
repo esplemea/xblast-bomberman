@@ -43,7 +43,7 @@ public final class Lists {
 	 */
 	public static <T> List<List<T>> permutations(List<T> l) {
 		if (l.isEmpty()) {
-			return new ArrayList<List<T>>();
+			return Collections.singletonList(Collections.emptyList());
 		} else {
 			List<T> subList = new ArrayList<T>(l.subList(1, l.size()));
 			List<List<T>> temp = permutations(subList);

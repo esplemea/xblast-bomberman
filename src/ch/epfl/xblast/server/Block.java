@@ -1,5 +1,7 @@
 package ch.epfl.xblast.server;
 
+import java.util.NoSuchElementException;
+
 /**
  * 
  * @author Nicolas ZIMMERMANN Clara DI MARCO
@@ -8,7 +10,7 @@ package ch.epfl.xblast.server;
  */
 
 public enum Block {
-    FREE, INDESTRUCTIBLE_WALL, DESTRUCTIBLE_WALL, CRUMBLING_WALL, BONUS_BOMB, BONUS_RANGE;
+    FREE, INDESTRUCTIBLE_WALL, DESTRUCTIBLE_WALL, CRUMBLING_WALL, BONUS_BOMB(Bonus.INC_BOMB), BONUS_RANGE(Bonus.INC_RANGE);
 
     private Bonus maybeAssociatedBonus;
 
@@ -38,6 +40,9 @@ public enum Block {
     }
 
     public Bonus associatedBonus() {
+    	if(this.maybeAssociatedBonus==null){
+    		throw new NoSuchElementException("There isn't any bonus on this block");
+    	}
         return this.maybeAssociatedBonus;
     }
 }

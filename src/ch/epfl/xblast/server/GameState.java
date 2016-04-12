@@ -63,13 +63,13 @@ public final class GameState {
         if (players.size() != 4) {
             throw new IllegalArgumentException("You need 4 players");
         } else {
-            this.players = Collections.unmodifiableList(players);
+            this.players = Collections.unmodifiableList(new ArrayList<>(players));
         }
 
         this.bombs = Objects
                 .requireNonNull(Collections.unmodifiableList(new ArrayList<>(bombs)));
         this.explosions = Objects
-                .requireNonNull(Collections.unmodifiableList(explosions));
+                .requireNonNull(Collections.unmodifiableList(new ArrayList<>(explosions)));
         this.blasts = Objects
                 .requireNonNull(Collections.unmodifiableList(new ArrayList<>(blasts)));
     }
@@ -204,7 +204,7 @@ public final class GameState {
         List<Sq<Sq<Cell>>> explosions1 = new ArrayList<>(explosions);
 
         for (Bomb bomb : bombs) {
-            if (bomb.fuseLengths().isEmpty()) {
+            if (bomb.fuseLengths().tail().isEmpty()) {
                 explosions1.addAll(bomb.explosion());
             } else if (blastedCells.contains(bomb.position())) {
                 explosions1.addAll(bomb.explosion());

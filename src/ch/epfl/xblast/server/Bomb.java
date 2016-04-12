@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import org.junit.internal.Throwables;
+
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.ArgumentChecker;
 import ch.epfl.xblast.Cell;
@@ -27,6 +29,9 @@ public class Bomb {
 	 * @param range
 	 */
 	public Bomb(PlayerID ownerId, Cell position, Sq<Integer> fuseLengths, int range) {
+		if(fuseLengths.isEmpty()){
+			throw new IllegalArgumentException("fuseLengths cannot be empty");
+		}
 		this.ownerId = Objects.requireNonNull(ownerId);
 		this.position = Objects.requireNonNull(position);
 		this.fuseLengths = Objects.requireNonNull(fuseLengths);

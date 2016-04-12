@@ -1,6 +1,20 @@
 package ch.epfl.xblast.server.debug.boardDrawer;
 
-import ch.epfl.xblast.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import ch.epfl.xblast.Cell;
+import ch.epfl.xblast.Direction;
+import ch.epfl.xblast.PlayerID;
+import ch.epfl.xblast.SubCell;
 import ch.epfl.xblast.server.Block;
 import ch.epfl.xblast.server.GameState;
 import ch.epfl.xblast.server.Player;
@@ -20,9 +34,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.*;
 
 /**
  * @author Alexandre MICHEL
