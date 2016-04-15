@@ -44,7 +44,7 @@ public class Bomb {
 	}
 
 	/**
-	 * Constructor for a bomb using a int number for the fuseLengths
+	 * Constructor for a bomb using a integer number for the fuseLengths
 	 * 
 	 * @throws NullPointerException
 	 *             if either ownerId, position or fuseLengths is null
