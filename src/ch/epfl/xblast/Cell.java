@@ -8,10 +8,12 @@ import java.util.Objects;
 /**
  * 
  * @author Nicolas ZIMMERMANN Clara DI MARCO
- * @date March 4, 2016
+ * @date April 15, 2016
  *
  */
+
 public final class Cell {
+
     public final static int COLUMNS = 15;
     public final static int ROWS = 13;
     public final static int COUNT = ROWS * COLUMNS;
@@ -24,10 +26,10 @@ public final class Cell {
     /**
      * Constructor for a cell. The numbers x and y are normalized
      * 
-     * @param the
-     *            x position of the Cell in the rows
-     * @param the
-     *            y position of the Cell in the columns
+     * @param x
+     *            position of the Cell in the rows
+     * @param y
+     *            position of the Cell in the columns
      */
     public Cell(int x, int y) {
         mx = Math.floorMod(x, COLUMNS);
@@ -103,16 +105,14 @@ public final class Cell {
             horizontal = !horizontal;
 
         } while (!ix.isEmpty() && !iy.isEmpty());
-        
 
         return output;
     }
-    
 
     /**
      * 
-     * @param a
-     *            Direction that
+     * @param that
+     *            Direction of the neighbor
      * @return the cell next to the current one in the direction that.
      */
     public Cell neighbor(Direction that) {
@@ -138,8 +138,8 @@ public final class Cell {
     }
 
     /**
-     * @param an
-     *            Object that
+     * @param that
+     *            the Object to check
      * @return true if the object that is a cell with the same position as the
      *         current one.
      */

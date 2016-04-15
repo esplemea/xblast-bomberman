@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import org.junit.internal.Throwables;
-
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.ArgumentChecker;
 import ch.epfl.xblast.Cell;
@@ -102,6 +100,6 @@ public class Bomb {
 	}
 
 	private Sq<Sq<Cell>> explosionArmTowards(Direction dir) {
-		return Sq.repeat(Ticks.EXPLOSION_TICKS, Sq.iterate(position, c -> c.neighbor(dir)).limit(range));
+		return Sq.repeat(Ticks.EXPLOSION_TICKS + 1, Sq.iterate(position, c -> c.neighbor(dir)).limit(range));
 	}
 }

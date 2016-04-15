@@ -2,8 +2,8 @@ package ch.epfl.xblast;
 
 /**
  * 
- * @author Nicolas ZIMMERMANN and Clara DI MARCO
- * @date March 16, 2016
+ * @author Nicolas ZIMMERMANN Clara DI MARCO
+ * @date April 15, 2016
  *
  */
 
