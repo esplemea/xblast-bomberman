@@ -3,13 +3,18 @@ package ch.epfl.xblast.server;
 /**
  * 
  * @author Nicolas ZIMMERMANN and Clara DI MARCO
- * @date March 15, 2016
+ * @date April 15, 2016
  *
  */
 
 public enum Bonus {
 
 	INC_BOMB {
+		/**
+		 * Apply a Bomb Bonus to a Player
+		 * 
+		 * @return the new Player
+		 */
 		@Override
 		public Player applyTo(Player player) {
 			if (player.maxBombs() < maxBomb) {
@@ -20,6 +25,11 @@ public enum Bonus {
 	},
 
 	INC_RANGE {
+		/**
+		 * Apply a Range Bonus to a Player
+		 * 
+		 * @return the new Player
+		 */
 		@Override
 		public Player applyTo(Player player) {
 			if (player.bombRange() < maxRange) {

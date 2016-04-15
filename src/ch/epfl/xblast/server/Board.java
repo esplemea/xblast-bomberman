@@ -11,7 +11,7 @@ import ch.epfl.xblast.Lists;
 /**
  * 
  * @author Nicolas ZIMMERMANN Clara DI MARCO
- * @date March 4, 2016
+ * @date April 15, 2016
  *
  */
 
@@ -29,7 +29,8 @@ public final class Board {
 	 */
 	public Board(List<Sq<Block>> blocks) {
 		if (blocks.size() != Cell.COLUMNS * Cell.ROWS) {
-			throw new IllegalArgumentException("The list must contain exactly 195 sequences, actual : "+blocks.size());
+			throw new IllegalArgumentException(
+					"The list must contain exactly 195 sequences, actual : "+blocks.size());
 		}
 		ArrayList<Sq<Block>> liste = new ArrayList<>(blocks);
 		this.blocks = Collections.unmodifiableList(liste);

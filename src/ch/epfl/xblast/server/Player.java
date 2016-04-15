@@ -102,8 +102,8 @@ public class Player {
 	 * @return the sequence of LifeStates after being hit (after a death)
 	 */
 	public Sq<LifeState> statesForNextLife() {
-		Sq<LifeState> lives;// = Sq.repeat(Ticks.PLAYER_DYING_TICKS, new
-							// LifeState(lives(), State.DYING));
+		Sq<LifeState> lives; //= Sq.repeat(Ticks.PLAYER_DYING_TICKS, new
+							//LifeState(lives(), State.DYING));
 		if (lives() <= 1) {
 			lives = Sq.repeat(Ticks.PLAYER_DYING_TICKS, new LifeState(lives(), State.DYING))
 					.concat(Sq.constant(new LifeState(0, State.DEAD)));
