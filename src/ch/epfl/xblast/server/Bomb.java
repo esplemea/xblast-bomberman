@@ -10,6 +10,13 @@ import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerID;
 
+/**
+ * 
+ * @author Nicolas ZIMMERMANN Clara DI MARCO
+ * @date April 15, 2016
+ *
+ */
+
 public class Bomb {
 	private final PlayerID ownerId;
 	private final Cell position;
@@ -27,7 +34,7 @@ public class Bomb {
 	 * @param range
 	 */
 	public Bomb(PlayerID ownerId, Cell position, Sq<Integer> fuseLengths, int range) {
-		if(fuseLengths.isEmpty()){
+		if (fuseLengths.isEmpty()) {
 			throw new IllegalArgumentException("fuseLengths cannot be empty");
 		}
 		this.ownerId = Objects.requireNonNull(ownerId);
@@ -91,12 +98,13 @@ public class Bomb {
 	}
 
 	/**
+	 * Create the explosion of a Bomb in the 4 Direction (N, S, E, W)
 	 * 
 	 * @return the bomb's explosion
 	 */
 	public List<Sq<Sq<Cell>>> explosion() {
 		return Arrays.asList(explosionArmTowards(Direction.E), explosionArmTowards(Direction.W),
-                explosionArmTowards(Direction.N), explosionArmTowards(Direction.S));
+				explosionArmTowards(Direction.N), explosionArmTowards(Direction.S));
 	}
 
 	private Sq<Sq<Cell>> explosionArmTowards(Direction dir) {
