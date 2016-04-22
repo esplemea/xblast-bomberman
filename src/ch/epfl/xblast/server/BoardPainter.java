@@ -39,7 +39,11 @@ public final class BoardPainter {
 	 * @return the byte used to identify the Block in a Cell of the Board
 	 */
 	public byte byteForCell(Board board, Cell position) {
-		return (((board.blockAt(position) == Block.FREE) && board.blockAt(position.neighbor(Direction.W)).castsShadow())
-				? (byte) shadow.ordinal() : (byte) palette.get(board.blockAt(position)).ordinal());
+	    if(board.blockAt(position) == Block.FREE && board.blockAt(position.neighbor(Direction.W)).castsShadow()){
+	        return (byte) shadow.ordinal();
+	    }
+	    else{
+	        return (byte) palette.get(board.blockAt(position)).ordinal();
+	    }
 	}
 }
