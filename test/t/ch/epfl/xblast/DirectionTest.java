@@ -1,10 +1,12 @@
-package ch.epfl.xblast;
+package t.ch.epfl.xblast;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import ch.epfl.xblast.Direction;
 
 public class DirectionTest {
     @Test
@@ -13,14 +15,6 @@ public class DirectionTest {
             assertEquals(d, d.opposite().opposite());
     }
 
-    @Test
-    public void oppositeWorksForAll4Directions() {
-        assertEquals(Direction.S, Direction.N.opposite());
-        assertEquals(Direction.W, Direction.E.opposite());
-        assertEquals(Direction.N, Direction.S.opposite());
-        assertEquals(Direction.E, Direction.W.opposite());
-    }
-    
     @Test
     public void oppositeIsTwoStepsAway() {
         for (Direction d: Direction.values())

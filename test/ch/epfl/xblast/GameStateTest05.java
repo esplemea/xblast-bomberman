@@ -1,11 +1,5 @@
 package ch.epfl.xblast;
 
-import static ch.epfl.xblast.GameStateTestUtils.addToSet;
-import static ch.epfl.xblast.GameStateTestUtils.asSet;
-import static ch.epfl.xblast.GameStateTestUtils.bombDecreased;
-import static ch.epfl.xblast.GameStateTestUtils.removeFromSet;
-import static ch.epfl.xblast.GameStateTestUtils.xAssertEquals;
-import static ch.epfl.xblast.GameStateTestUtils.xAssertNotEquals;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
@@ -18,6 +12,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static ch.epfl.xblast.GameStateTestUtils.addToSet;
+import static ch.epfl.xblast.GameStateTestUtils.asSet;
+import static ch.epfl.xblast.GameStateTestUtils.bombDecreased;
+import static ch.epfl.xblast.GameStateTestUtils.removeFromSet;
+import static ch.epfl.xblast.GameStateTestUtils.xAssertEquals;
+import static ch.epfl.xblast.GameStateTestUtils.xAssertNotEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +36,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.epfl.cs108.Sq;
+import ch.epfl.xblast.Cell;
+import ch.epfl.xblast.Direction;
+import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.server.Block;
 import ch.epfl.xblast.server.Board;
 import ch.epfl.xblast.server.Bomb;
