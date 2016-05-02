@@ -23,7 +23,9 @@ public final class GameStateSerializer {
 	};
 
 	/**
-	 * serialize the whole game, in this order : blocks, bombs/blasts, players, ticks.
+	 * serialize the whole game, in this order : blocks, bombs/blasts, players,
+	 * ticks.
+	 * 
 	 * @param painter
 	 * @param game
 	 * @return the encoded GameState
@@ -45,10 +47,10 @@ public final class GameStateSerializer {
 				output.add(ExplosionPainter.BYTE_FOR_EMPTY);
 			}
 		}
-		for(Player player : game.players()){
+		for (Player player : game.players()) {
 			output.add(PlayerPainter.byteForPlayer(game.ticks(), player));
 		}
-		output.add((byte)(Math.ceil(game.ticks()/2)));
+		output.add((byte) (Math.ceil(game.remainingTime()/ 2)));
 		output = RunLengthEncoder.encode(output);
 		return output;
 	}
