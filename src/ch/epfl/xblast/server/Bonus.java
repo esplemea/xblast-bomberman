@@ -17,7 +17,7 @@ public enum Bonus {
 		 */
 		@Override
 		public Player applyTo(Player player) {
-			if (player.maxBombs() < maxBomb) {
+			if (player.maxBombs() < MAX_BOMB) {
 				return player.withMaxBombs(player.maxBombs() + 1);
 			}
 			return player;
@@ -32,15 +32,15 @@ public enum Bonus {
 		 */
 		@Override
 		public Player applyTo(Player player) {
-			if (player.bombRange() < maxRange) {
+			if (player.bombRange() < MAX_RANGE) {
 				return player.withBombRange(player.bombRange() + 1);
 			}
 			return player;
 		}
 	};
 
-	private static final int maxBomb = 9;
-	private static final int maxRange = 9;
+	private static final int MAX_BOMB = 9;
+	private static final int MAX_RANGE = 9;
 
 	abstract public Player applyTo(Player player);
 }

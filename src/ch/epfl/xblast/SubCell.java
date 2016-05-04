@@ -141,8 +141,6 @@ public final class SubCell {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(
-                containingCell().rowMajorIndex() * Math.pow(SUBCELL_SIZE, 2)
-                        + my * X_MAX + mx);
+        return my*Cell.COLUMNS*SUBCELL_SIZE+mx;
     }
 }

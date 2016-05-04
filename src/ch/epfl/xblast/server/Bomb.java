@@ -108,6 +108,6 @@ public class Bomb {
 	}
 
 	private Sq<Sq<Cell>> explosionArmTowards(Direction dir) {
-		return Sq.repeat(Ticks.EXPLOSION_TICKS + 1, Sq.iterate(position, c -> c.neighbor(dir)).limit(range));
+		return Sq.repeat(Ticks.EXPLOSION_TICKS, Sq.iterate(position, c -> c.neighbor(dir)).limit(range));
 	}
 }

@@ -60,7 +60,7 @@ public final class GameState {
         this.ticks = ArgumentChecker.requireNonNegative(ticks);
         this.board = Objects.requireNonNull(board);
 
-        if (players.size() != 4) {
+        if (Objects.requireNonNull(players).size() != 4) {
             throw new IllegalArgumentException("You need 4 players");
         } else {
             this.players = Collections
@@ -99,12 +99,7 @@ public final class GameState {
      * @return true if the game is over
      */
     public boolean isGameOver() {
-        for (Player player : players) {
-            if (player.isAlive()) {
-                return true;
-            }
-        }
-        return ticks >= Ticks.TOTAL_TICKS;
+        return ticks >= Ticks.TOTAL_TICKS || alivePlayers().size()<=1;
     }
 
     /**
@@ -112,7 +107,7 @@ public final class GameState {
      * @return Time left for the game in seconds
      */
     public double remainingTime() {
-        return (Ticks.TOTAL_TICKS - ticks) / Ticks.TICKS_PER_SECOND;
+        return (Ticks.TOTAL_TICKS - ticks) / (double)Ticks.TICKS_PER_SECOND;
     }
 
     /**

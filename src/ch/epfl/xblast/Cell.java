@@ -144,7 +144,7 @@ public final class Cell {
      *         current one.
      */
     public boolean equals(Object that) {
-        if (that.getClass() == this.getClass()) {
+        if (Objects.requireNonNull(that).getClass() == this.getClass()) {
             Cell obj = (Cell) that;
             return (obj.my == this.my && obj.mx == this.mx);
         }
@@ -163,6 +163,6 @@ public final class Cell {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(rowMajorIndex());
+        return rowMajorIndex();
     }
 }

@@ -112,16 +112,7 @@ public class Player {
     public Sq<LifeState> statesForNextLife() {
         Sq<LifeState> lives = Sq.repeat(Ticks.PLAYER_DYING_TICKS,
                 new LifeState(lives(), State.DYING));
-        if (lives() <= 1) {
-            return lives.concat(Sq.constant(new LifeState(0, State.DEAD)));
-        } else {
-            return lives
-                    .concat(Sq.repeat(Ticks.PLAYER_INVULNERABLE_TICKS,
-                            new LifeState(lives() - 1, State.INVULNERABLE)))
-                    .concat(Sq.constant(
-                            new LifeState(lives() - 1, State.VULNERABLE)));
-
-        }
+        return lives.concat(createLifeState(lives()));
     }
 
     /**
@@ -211,8 +202,8 @@ public class Player {
     }
 
     public static class LifeState {
-        int lives;
-        State state;
+        private final int lives;
+        private final State state;
 
         /**
          * Constructor for a LifeState
@@ -259,8 +250,8 @@ public class Player {
     }
 
     public static final class DirectedPosition {
-        Direction direction;
-        SubCell position;
+        private final Direction direction;
+        private final SubCell position;
 
         /**
          * Constructor for a DirectedPosition
