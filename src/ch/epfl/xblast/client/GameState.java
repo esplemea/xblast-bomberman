@@ -31,7 +31,7 @@ public final class GameState {
 		private final SubCell position;
 		private final Image image;
 
-		private Player(PlayerID id, int lives, SubCell position, Image image) {
+		public Player(PlayerID id, int lives, SubCell position, Image image) {
 			this.id = id;
 			this.lives = lives;
 			this.position = position;
