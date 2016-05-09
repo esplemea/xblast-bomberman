@@ -47,11 +47,11 @@ public final class GameStateSerializer {
 				output.add(ExplosionPainter.BYTE_FOR_EMPTY);
 			}
 		}
+		output = RunLengthEncoder.encode(output);
 		for (Player player : game.players()) {
 			output.add(PlayerPainter.byteForPlayer(game.ticks(), player));
 		}
 		output.add((byte) (Math.ceil(game.remainingTime()/ 2)));
-		output = RunLengthEncoder.encode(output);
 		return output;
 	}
 }
