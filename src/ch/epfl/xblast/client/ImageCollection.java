@@ -22,16 +22,18 @@ public final class ImageCollection {
      * @throws IOException
      * @throws NumberFormatException
      */
-    public ImageCollection(String repertoire)
-            throws URISyntaxException, NumberFormatException, IOException {
+    public ImageCollection(String repertoire) {
         Map<Byte, Image> output = new HashMap<>();
-        File dir = new File(ImageCollection.class.getClassLoader()
-                .getResource(repertoire).toURI());
-        for (int i = 0; i < dir.listFiles().length; ++i) {
-            output.put(
-                    (byte) Integer.parseInt(
-                            dir.listFiles()[i].getName().substring(0, 3)),
-                    ImageIO.read(dir.listFiles()[i]));
+        try {
+            File dir = new File(ImageCollection.class.getClassLoader()
+                    .getResource(repertoire).toURI());
+            for (int i = 0; i < dir.listFiles().length; ++i) {
+                output.put(
+                        (byte) Integer.parseInt(
+                                dir.listFiles()[i].getName().substring(0, 3)),
+                        ImageIO.read(dir.listFiles()[i]));
+            }
+        } catch (URISyntaxException | NumberFormatException | IOException e) {
         }
         collection = Collections.unmodifiableMap(new HashMap<>(output));
 
@@ -44,8 +46,8 @@ public final class ImageCollection {
      * @return the right image or throws a NoSuchElementException if there's no
      *         Image in the index
      */
-    public Image image(byte index) {
-        if (collection.containsKey(index))
+    public Image image(int index) {
+        if (collection.containsKey((byte) index))
             return collection.get(index);
         throw new NoSuchElementException();
     }
@@ -56,8 +58,8 @@ public final class ImageCollection {
      * @param index
      * @return the right image or null if there's no Image in the index
      */
-    public Image imageOrNull(byte index) {
-        if (collection.containsKey(index))
+    public Image imageOrNull(int index) {
+        if (collection.containsKey((byte) index))
             return collection.get(index);
         return null;
     }
