@@ -24,7 +24,27 @@ public final class GameState {
 		this.score = Collections.unmodifiableList(new ArrayList<>(score));
 		this.time = Collections.unmodifiableList(new ArrayList<>(time));
 	}
+	
+	public List<Player> getPlayers() {
+		return players;
+	}
 
+	public List<Image> getBoard() {
+		return board;
+	}
+
+	public List<Image> getBombs() {
+		return bombs_blasts;
+	}
+
+	public List<Image> getScore() {
+		return score;
+	}
+
+	public List<Image> getTime() {
+		return time;
+	}
+	
 	public static final class Player {
 		private final PlayerID id;
 		private final int lives;
@@ -36,6 +56,20 @@ public final class GameState {
 			this.lives = lives;
 			this.position = position;
 			this.image = image;
+		}
+		
+		public int getLives(){
+			return lives;
+		}
+		
+		public SubCell getPosition(){
+			return position;
+		}
+		public PlayerID getID(){
+			return id;
+		}
+		public Image getImage(){
+			return image;
 		}
 	}
 }
