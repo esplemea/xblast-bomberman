@@ -41,7 +41,7 @@ public final class GameStateSerializer {
 
         Set<Cell> blastedCells = game.blastedCells();
         for (Cell c : Cell.ROW_MAJOR_ORDER) {
-            if (blastedCells.contains(c)) {
+            if (game.board().blockAt(c).isFree() && blastedCells.contains(c)) {
                 explosionOutput.add(ExplosionPainter.byteForBlast(
                         blastedCells.contains(c.neighbor(Direction.N)),
                         blastedCells.contains(c.neighbor(Direction.E)),
@@ -60,6 +60,9 @@ public final class GameStateSerializer {
         output.addAll(explosionOutput);
 
         for (Player player : game.players()) {
+            output.add((byte) player.lives());
+            output.add((byte) player.position().x());
+            output.add((byte) player.position().y());
             output.add(PlayerPainter.byteForPlayer(game.ticks(), player));
         }
 
