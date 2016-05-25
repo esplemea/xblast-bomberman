@@ -22,7 +22,8 @@ import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.Time;
 
 public class Main {
-    private final static Map<Integer, PlayerAction> KB = new HashMap<>(createMap());
+    private final static Map<Integer, PlayerAction> KB = new HashMap<>(
+            createMap());
     private final static XblastComponent XBC = new XblastComponent();
     private final static int MAXIMUM_BYTES_SIZE = 500;
 
@@ -53,33 +54,35 @@ public class Main {
         game.setVisible(true);
     }
 
-    public static void main(String[] args) throws IOException, InvocationTargetException, InterruptedException {
-        System.out.println("princesse");
-       InetSocketAddress address = new InetSocketAddress(args.length == 0 ? "localhost" : args[0],
+    public static void main(String[] args) throws IOException,
+            InvocationTargetException, InterruptedException {
+        InetSocketAddress address = new InetSocketAddress(
+                args.length == 0 ? "localhost" : args[0],
                 ch.epfl.xblast.server.Main.PORT);
-        DatagramChannel channel = DatagramChannel.open(StandardProtocolFamily.INET);
+        DatagramChannel channel = DatagramChannel
+                .open(StandardProtocolFamily.INET);
         ByteBuffer buffer = ByteBuffer.allocate(1);
-        System.out.println("princesse");
-        SwingUtilities.invokeAndWait(() -> createUI());
+
         Consumer<PlayerAction> consumer = playerAction -> {
             try {
-                    buffer.put((byte) playerAction.ordinal());
-                    buffer.flip();
-                    channel.send(buffer, address);
-                    buffer.clear();
+                buffer.put((byte) playerAction.ordinal());
+                buffer.flip();
+                channel.send(buffer, address);
+                buffer.clear();
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
         };
 
         // Start a game window and the component
-        
+        SwingUtilities.invokeAndWait(() -> createUI());
         XBC.addKeyListener(new KeyboardEventHandler(KB, consumer));
         XBC.requestFocus();
 
         // Send request to join the game and wait to receive data
         channel.configureBlocking(false);
-        ByteBuffer byteNull = ByteBuffer.allocate(1), data = ByteBuffer.allocate(MAXIMUM_BYTES_SIZE);
+        ByteBuffer byteNull = ByteBuffer.allocate(1),
+                data = ByteBuffer.allocate(MAXIMUM_BYTES_SIZE);
         while (channel.receive(data) == null) {
             channel.send(byteNull, address);
             byteNull.rewind();
@@ -89,14 +92,17 @@ public class Main {
         channel.configureBlocking(true);
         PlayerID playerID;
         List<Byte> gameState = new ArrayList<>();
-        while (channel.receive(data) != null) {
+        do {
             data.flip();
             playerID = PlayerID.values()[data.get()];
             while (data.hasRemaining()) {
                 gameState.add(data.get());
             }
-            XBC.setGameState(GameStateDeserializer.deserializeGameState(gameState), playerID);
+            XBC.setGameState(
+                    GameStateDeserializer.deserializeGameState(gameState),
+                    playerID);
             data.clear();
-        }
+            gameState.clear();
+        } while (channel.receive(data) != null);
     }
 }

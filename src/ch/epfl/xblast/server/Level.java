@@ -55,26 +55,18 @@ public final class Level {
     private static Level defaultLevel() {
 
         List<List<Block>> defaultInnerBlocks = new ArrayList<>();
-        defaultInnerBlocks.add(Arrays.asList(Block.FREE, Block.FREE, Block.FREE,
-                Block.FREE, Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE));
-        defaultInnerBlocks.add(Arrays.asList(Block.FREE,
-                Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL,
-                Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL,
-                Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL));
-        defaultInnerBlocks.add(Arrays.asList(Block.FREE,
-                Block.DESTRUCTIBLE_WALL, Block.FREE, Block.FREE, Block.FREE,
-                Block.DESTRUCTIBLE_WALL, Block.FREE));
-        defaultInnerBlocks.add(Arrays.asList(Block.DESTRUCTIBLE_WALL,
-                Block.INDESTRUCTIBLE_WALL, Block.FREE,
-                Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL,
-                Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL));
-        defaultInnerBlocks.add(Arrays.asList(Block.FREE,
-                Block.DESTRUCTIBLE_WALL, Block.FREE, Block.DESTRUCTIBLE_WALL,
-                Block.FREE, Block.FREE, Block.FREE));
-        defaultInnerBlocks.add(Arrays.asList(Block.DESTRUCTIBLE_WALL,
-                Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL,
-                Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL,
-                Block.INDESTRUCTIBLE_WALL, Block.FREE));
+        Block __ = Block.FREE;
+        Block XX = Block.INDESTRUCTIBLE_WALL;
+        Block OO = Block.DESTRUCTIBLE_WALL;
+        
+        defaultInnerBlocks.addAll(
+                Arrays.asList(
+                        Arrays.asList(__, __, __, __, __, OO, __),
+                        Arrays.asList(__, XX, OO, XX, OO, XX, OO),
+                        Arrays.asList(__, OO, __, __, __, OO, __),
+                        Arrays.asList(OO, XX, __, XX, XX, XX, XX),
+                        Arrays.asList(__, OO, __, OO, __, __, __),
+                        Arrays.asList(OO, XX, OO, XX, OO, XX, __)));
 
         Map<Block, BlockImage> defaultPalette = new HashMap<>();
         defaultPalette.put(Block.FREE, BlockImage.IRON_FLOOR);

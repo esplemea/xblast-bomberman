@@ -1,6 +1,8 @@
 package ch.epfl.xblast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -25,48 +27,30 @@ public final class RunLengthEncoder {
 	 * @return
 	 */
 	public static List<Byte> encode(List<Byte> bytes) {
+		int counter = 0;
+		byte lastB = 0;
 		List<Byte> output = new ArrayList<>();
-		byte byteRepetition = 0;
-		byte actualByte = bytes.get(0);
-		for (byte currentByte : bytes) {
-			if (actualByte == currentByte) {
-				byteRepetition++;
-				if (byteRepetition == 130) {
-					output.add((byte) -128);
-					output.add(actualByte);
-					byteRepetition = 0;
+		for (Byte b : bytes) {
+			if (!(lastB == b && ++counter < 130)) {
+				if (counter < 3)
+					output.addAll(Collections.nCopies(counter, lastB));
+				else {
+					output.add((byte) (-counter + 2));
+					output.add(lastB);
 				}
-			} else {
-				switch (byteRepetition) {
-				case 2:
-					output.add(actualByte);
-				case 1:
-					output.add(actualByte);
-					break;
-				case 0:
-					break;
-				default:
-					output.add((byte) (-byteRepetition + 2));
-					output.add(actualByte);
-				}
-				byteRepetition = 1;
-				actualByte = currentByte;
+				counter = counter == 130 ? 0 : 1;
 			}
+			lastB = b;
 		}
-		switch (byteRepetition) {
-		case 2:
-			output.add(actualByte);
-		case 1:
-			output.add(actualByte);
-			break;
-		case 0:
-			break;
-		default:
-			output.add((byte) (-byteRepetition + 2));
-			output.add(actualByte);
+		if (counter < 3)
+			output.addAll(Collections.nCopies(counter, lastB));
+		else {
+			output.add((byte) (-counter + 2));
+			output.add(lastB);
 		}
 		return output;
 	}
+
 
 	/**
 	 * Decode a list of grouped bytes into a normal list of bytes
@@ -76,15 +60,13 @@ public final class RunLengthEncoder {
 	 */
 	public static List<Byte> decode(List<Byte> bytes) {
 		List<Byte> output = new ArrayList<>();
-		byte byteRepetition = 0;
+		int byteRepetition = 1;
 		for (byte currentByte : bytes) {
 			if (currentByte < 0) {
-				byteRepetition = (byte)(-currentByte + 2);
-			} else{
-				for (int i = 0; i <= byteRepetition; ++i) {
-					output.add(currentByte);
-				}
-				byteRepetition=0;
+				byteRepetition = -currentByte + 2;
+			} else {
+				output.addAll(Collections.nCopies(byteRepetition, currentByte));
+				byteRepetition = 1;
 			}
 		}
 		return output;

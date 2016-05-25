@@ -111,8 +111,8 @@ public class Player {
      */
     public Sq<LifeState> statesForNextLife() {
         Sq<LifeState> lives = Sq.repeat(Ticks.PLAYER_DYING_TICKS,
-                new LifeState(lives(), State.DYING));
-        return lives.concat(createLifeState(lives()));
+                new LifeState(lives()-1, State.DYING));
+        return lives.concat(createLifeState(lives()-1));
     }
 
     /**

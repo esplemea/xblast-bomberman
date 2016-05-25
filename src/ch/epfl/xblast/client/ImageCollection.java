@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 import javax.imageio.ImageIO;
 
 public final class ImageCollection {
-    private final Map<Byte, Image> collection;
+    private final Map<Integer, Image> collection;
 
     /**
      * Create an ImageCollection from a repertoire
@@ -23,20 +23,19 @@ public final class ImageCollection {
      * @throws NumberFormatException
      */
     public ImageCollection(String repertoire) {
-        Map<Byte, Image> output = new HashMap<>();
+        Map<Integer, Image> output = new HashMap<>();
         try {
             File dir = new File(ImageCollection.class.getClassLoader()
                     .getResource(repertoire).toURI());
             for (int i = 0; i < dir.listFiles().length; ++i) {
                 output.put(
-                        (byte) Integer.parseInt(
+                        Integer.parseInt(
                                 dir.listFiles()[i].getName().substring(0, 3)),
                         ImageIO.read(dir.listFiles()[i]));
             }
         } catch (URISyntaxException | NumberFormatException | IOException e) {
         }
         collection = Collections.unmodifiableMap(new HashMap<>(output));
-
     }
 
     /**
@@ -47,8 +46,9 @@ public final class ImageCollection {
      *         Image in the index
      */
     public Image image(int index) {
-        if (collection.containsKey((byte) index))
+        if (collection.containsKey(index))
             return collection.get(index);
+            
         throw new NoSuchElementException();
     }
 
@@ -59,7 +59,7 @@ public final class ImageCollection {
      * @return the right image or null if there's no Image in the index
      */
     public Image imageOrNull(int index) {
-        if (collection.containsKey((byte) index))
+        if (collection.containsKey(index))
             return collection.get(index);
         return null;
     }

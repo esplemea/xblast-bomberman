@@ -67,7 +67,6 @@ public class Main {
 
             for (Map.Entry<SocketAddress, PlayerID> entry : playersIP
                     .entrySet()) {
-                System.out.println(buffer);
                 buffer.put(0, (byte) entry.getValue().ordinal());
                 channel.send(buffer, entry.getKey());
                 buffer.rewind();
@@ -103,8 +102,8 @@ public class Main {
             moveEvent.clear();
             bombDropEvent.clear();
 
-            long timeLeft = startingTime
-                    + (gameState.ticks() + 1) * Ticks.TICK_NANOSECOND_DURATION- System.nanoTime();
+            long timeLeft = (int)(startingTime
+                    + (gameState.ticks() + 1) * Ticks.TICK_NANOSECOND_DURATION- System.nanoTime());
             if (timeLeft > 0) {
                 Thread.sleep( (timeLeft / Time.US_PER_S),
                         (int) (timeLeft % Time.US_PER_S));

@@ -30,7 +30,7 @@ public final class PlayerPainter {
 		byte output = (byte) (player.id().ordinal() * 20);
 		State state = player.lifeState().state();
 		if (state == State.DYING) {
-			if (player.lives() < 2)
+			if (player.lives() < 1)
 				output += 13;
 			else
 				output += 12;
