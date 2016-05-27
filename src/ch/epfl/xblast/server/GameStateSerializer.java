@@ -23,7 +23,7 @@ public final class GameStateSerializer {
     };
 
     /**
-     * serialize the whole game, in this order : blocks, bombs/blasts, players,
+     * Serialize the whole game, in this order : blocks, bombs/blasts, players,
      * ticks.
      * 
      * @param painter

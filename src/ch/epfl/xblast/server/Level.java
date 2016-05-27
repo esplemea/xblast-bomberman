@@ -51,10 +51,16 @@ public final class Level {
     public GameState getGameState() {
         return initialGame;
     }
-
+    
+    /**
+     * Create a default Level
+     * 
+     * @return
+     */
     private static Level defaultLevel() {
 
         List<List<Block>> defaultInnerBlocks = new ArrayList<>();
+        
         Block __ = Block.FREE;
         Block XX = Block.INDESTRUCTIBLE_WALL;
         Block OO = Block.DESTRUCTIBLE_WALL;

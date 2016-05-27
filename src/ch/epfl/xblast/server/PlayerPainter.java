@@ -12,19 +12,19 @@ import ch.epfl.xblast.server.Player.LifeState.State;
 public final class PlayerPainter {
 
 	/**
-	 * private constructor, not to be instanced
+	 * Private constructor, not to be instanced
 	 */
 	private PlayerPainter() {
 	}
 
 	/**
-	 * regarding to the PlayerID, LifeState, Direction, the actual Tick and his
-	 * position, returns the right image of player.
+	 * Regarding the PlayerID, LifeState, Direction, the actual Tick and his
+	 * position, returns the right image for the player.
 	 * 
 	 * @param tick
 	 *            current tick
 	 * @param player
-	 * @return
+	 * @return the image for the player
 	 */
 	public static byte byteForPlayer(int tick, Player player) {
 		byte output = (byte) (player.id().ordinal() * 20);

@@ -18,16 +18,32 @@ import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.Time;
 import ch.epfl.xblast.client.PlayerAction;
 
+/**
+ * 
+ * @author Nicolas ZIMMERMANN Clara DI MARCO
+ * @date Mai 25, 2016
+ *
+ */
+
 public class Main {
 
-    private final static int DEFAULT_PLAYER_NMB = 1; //TODO
+    private final static int DEFAULT_PLAYER_NMB = 4;
     public final static int PORT = 2016;
+
+    /**
+     * Main method (server part)
+     * 
+     * @param args
+     *            The number of player expected for the game
+     * @throws IOException
+     * @throws InterruptedException
+     */
 
     public static void main(String[] args)
             throws IOException, InterruptedException {
         Map<SocketAddress, PlayerID> playersIP = new HashMap<>();
         int playerNumber = args.length == 0 ? DEFAULT_PLAYER_NMB
-                : Integer.getInteger(args[0]);
+                : Integer.parseInt(args[0]);
 
         DatagramChannel channel = DatagramChannel
                 .open(StandardProtocolFamily.INET);
@@ -36,17 +52,18 @@ public class Main {
         channel.bind(new InetSocketAddress(PORT));
         channel.configureBlocking(true);
         ByteBuffer buffer = ByteBuffer.allocate(1);
-        
+
         while (playersIP.size() < playerNumber) {
             buffer.clear();
             senderAddress = channel.receive(buffer);
             buffer.flip();
 
-            if (buffer.hasRemaining() && buffer.get() == PlayerAction.JOIN_GAME.ordinal()) {
+            if (buffer.hasRemaining()
+                    && buffer.get() == PlayerAction.JOIN_GAME.ordinal()) {
                 playersIP.putIfAbsent(senderAddress,
                         PlayerID.values()[playersIP.size()]);
             }
-        
+
         }
         GameState gameState = Level.DEFAULT_LEVEL.getGameState();
         BoardPainter defaultBoard = Level.DEFAULT_LEVEL.getBoardPainter();
@@ -75,8 +92,8 @@ public class Main {
             buffer = ByteBuffer.allocate(1);
             byte event;
             while (!((senderAddress = channel.receive(buffer)) == null)) {
-                buffer.flip();
-                event = buffer.get();
+                //buffer.flip();
+                event = buffer.get(0);
                 switch (PlayerAction.values()[event]) {
                 case DROP_BOMB:
                     if (!bombDropEvent.contains(playersIP.get(senderAddress)))
@@ -102,12 +119,12 @@ public class Main {
             moveEvent.clear();
             bombDropEvent.clear();
 
-            long timeLeft = (int)(startingTime
-                    + (gameState.ticks() + 1) * Ticks.TICK_NANOSECOND_DURATION- System.nanoTime());
+            long timeLeft = (int) (startingTime
+                    + (gameState.ticks() + 1) * Ticks.TICK_NANOSECOND_DURATION
+                    - System.nanoTime());
             if (timeLeft > 0) {
-                Thread.sleep( (timeLeft / Time.US_PER_S),
+                Thread.sleep((timeLeft / Time.US_PER_S),
                         (int) (timeLeft % Time.US_PER_S));
-
 
             }
         }

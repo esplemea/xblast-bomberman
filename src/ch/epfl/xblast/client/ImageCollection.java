@@ -11,6 +11,13 @@ import java.util.NoSuchElementException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * 
+ * @author Nicolas ZIMMERMANN Clara DI MARCO
+ * @date Mai 25, 2016
+ *
+ */
+
 public final class ImageCollection {
     private final Map<Integer, Image> collection;
 
@@ -39,24 +46,24 @@ public final class ImageCollection {
     }
 
     /**
-     * give the image from the actual repertoire in the index position
+     * Give the image from the actual repertoire at the index position
      * 
      * @param index
      * @return the right image or throws a NoSuchElementException if there's no
-     *         Image in the index
+     *         Image at the index
      */
     public Image image(int index) {
         if (collection.containsKey(index))
             return collection.get(index);
-            
+
         throw new NoSuchElementException();
     }
 
     /**
-     * give the image from the actual repertoire in the index position
+     * Give the image from the actual repertoire at the index position
      * 
      * @param index
-     * @return the right image or null if there's no Image in the index
+     * @return the right image or null if there's no Image at the index
      */
     public Image imageOrNull(int index) {
         if (collection.containsKey(index))

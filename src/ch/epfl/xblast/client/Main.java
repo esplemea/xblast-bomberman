@@ -21,14 +21,23 @@ import com.sun.glass.events.KeyEvent;
 import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.Time;
 
+/**
+ * 
+ * @author Nicolas ZIMMERMANN Clara DI MARCO
+ * @date Mai 25, 2016
+ *
+ */
+
+@SuppressWarnings("restriction")
 public class Main {
+
     private final static Map<Integer, PlayerAction> KB = new HashMap<>(
             createMap());
     private final static XblastComponent XBC = new XblastComponent();
     private final static int MAXIMUM_BYTES_SIZE = 500;
 
     /**
-     * Initiate map linking each PlayerAction to a specific KeyEvent
+     * Initiate a map linking each PlayerAction to a specific KeyEvent
      * 
      * @return
      */
@@ -43,7 +52,7 @@ public class Main {
         return kb;
     }
 
-    /*
+    /**
      * Shows the window
      */
     private static void createUI() {
@@ -53,6 +62,16 @@ public class Main {
         game.pack();
         game.setVisible(true);
     }
+
+    /**
+     * Main method (client part)
+     * 
+     * @param args
+     *            the IP address of the client
+     * @throws IOException
+     * @throws InvocationTargetException
+     * @throws InterruptedException
+     */
 
     public static void main(String[] args) throws IOException,
             InvocationTargetException, InterruptedException {
