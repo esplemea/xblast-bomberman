@@ -92,7 +92,6 @@ public class Main {
             buffer = ByteBuffer.allocate(1);
             byte event;
             while (!((senderAddress = channel.receive(buffer)) == null)) {
-                //buffer.flip();
                 event = buffer.get(0);
                 switch (PlayerAction.values()[event]) {
                 case DROP_BOMB:
@@ -128,7 +127,10 @@ public class Main {
 
             }
         }
-
+        if (gameState.winner().isPresent())
+            System.out.println(gameState.winner());
+        else
+            System.out.println("No winner...");
     }
 
 }
